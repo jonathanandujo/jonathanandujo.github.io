@@ -5,17 +5,13 @@
         display: none !important;
     }
 
-    .print {
-        display: contents !important;
-    }
+    @page  
+{ 
+    /* size: auto;   auto is the initial value  */
 
-    .page {
-        max-width: 1280px;
-        background-color: #fff;
-        text-align: center;
-        border: none !important;
-        margin: 0px !important;
-    }
+    /* this affects the margin in the printer settings */ 
+    margin: 0mm 0mm 0mm 0mm;  
+} 
 }
 
 .print {
@@ -45,7 +41,7 @@ a:active {
 }
 
 .sheet {
-    margin: 15px;
+    margin: 0px 13px 0px 13px;
 }
 
 .header {
