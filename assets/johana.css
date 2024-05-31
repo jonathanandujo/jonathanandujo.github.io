@@ -1,0 +1,100 @@
+@media print {
+
+    .no-print,
+    .no-print * {
+        display: none !important;
+    }
+
+    @page  
+{ 
+    /* size: auto;   auto is the initial value  */
+
+    /* this affects the margin in the printer settings */ 
+    margin: 10mm 10mm 10mm 10mm;  
+} 
+}
+
+.print {
+    display: none;
+}
+* {
+    font-family: 'Roboto';
+    font-size: 1.12rem;
+}
+
+body {
+    background: #E9E9E9;
+}
+
+a,
+a:visited,
+a:active {
+    color: #031e3e;
+}
+
+.page {
+    max-width: 1080px;
+    background-color: #fff;
+    text-align: center;
+    border: 1px solid rgb(20, 20, 20);
+    margin: 10px auto;
+}
+
+.sheet {
+    margin: 0px 13px 0px 13px;
+}
+
+.header {
+    text-align: center;
+}
+
+.titleName {
+    font-size: 2rem !important;
+}
+
+.titlePosition {
+    font-size: 1.5rem !important;
+}
+
+.sectionHeader {
+    font-weight: bold;
+    text-align: center;
+    font-size: 1rem !important;
+    overflow: hidden;
+}
+
+.areaDescription {
+    text-align: left;
+}
+
+.skill {
+    /* float: right; */
+}
+
+.professionalSummaryDescription {
+    text-align: justify;
+}
+
+.job {
+    text-align: left;
+}
+
+.jobTitle {
+    text-align: left;
+}
+
+.jobDate {
+    float: right;
+}
+
+.educationDescription {
+    text-align: left;
+}
+
+.certificationDetail {
+    text-align: left;
+}
+
+.last-update {
+    font-size: 0.6rem;
+}
