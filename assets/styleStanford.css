@@ -1,3 +1,8 @@
+:root {
+    --primary-color:#000e20;
+    --secondary-color:#003984;
+}
+
 @media print {
 
     .no-print,
@@ -19,19 +24,23 @@
 }
 * {
     font-family: 'Roboto';
-    font-size: 0.95rem;
+    font-size: 0.97rem;
 }
 
 body {
-    background: #f0f0f0;
-    color: #000e20;
+    background: #b1b1b1;
+    color: var(--primary-color);
+}
+
+hr {
+    margin: 7px;
 }
 
 a,
 a:visited,
 a:active
 a:hover {
-    color: #000e20;
+    color: var(--primary-color);
 }
 
 .page {
@@ -53,7 +62,7 @@ a:hover {
 .titleName {
     font-size: 2rem !important;
     font-weight: bold;
-    /* color: rgb(0, 0, 160); */
+    color: var(--secondary-color);
 }
 
 .titlePosition {
@@ -64,7 +73,7 @@ a:hover {
     font-weight: bold;
     text-align: center;
     font-size: 1rem !important;
-    overflow: hidden;
+    color: var(--secondary-color);
 }
 
 .areaDescription {
