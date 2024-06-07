@@ -23,13 +23,15 @@
 }
 
 body {
-    background: #E9E9E9;
+    background: #f0f0f0;
+    color: #000e20;
 }
 
 a,
 a:visited,
-a:active {
-    color: #031e3e;
+a:active
+a:hover {
+    color: #000e20;
 }
 
 .page {
@@ -50,6 +52,8 @@ a:active {
 
 .titleName {
     font-size: 2rem !important;
+    font-weight: bold;
+    /* color: rgb(0, 0, 160); */
 }
 
 .titlePosition {
@@ -67,8 +71,9 @@ a:active {
     text-align: left;
 }
 
-.skill {
-    /* float: right; */
+.flex-container {
+    display: flex;
+    justify-content: space-between;
 }
 
 .professionalSummaryDescription {
@@ -80,11 +85,8 @@ a:active {
 }
 
 .jobTitle {
-    text-align: left;
-}
-
-.jobDate {
-    float: right;
+    display: flex;
+    justify-content: space-between;
 }
 
 .educationDescription {
