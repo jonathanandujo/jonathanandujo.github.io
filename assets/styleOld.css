@@ -1,0 +1,231 @@
+* {
+  font-family: 'Roboto';
+  
+}
+
+body {
+  background: #E9E9E9;
+}
+
+.bg-blue {
+  background-color: #0481b1;
+}
+
+.c-blue {
+  color: #0481b1;
+}
+
+.bg-black {
+  background-color: #031e3e;
+}
+
+.c-black {
+  color: #031e3e;
+}
+
+.c-gray {
+  color: #5E5E5E;
+}
+
+.c-silver {
+  color: #657996;
+}
+
+.c-white {
+  color: #ffffff;
+}
+
+a:hover{
+  text-decoration: none;
+}
+
+a, a:visited, a:active {
+  color: #031e3e;
+}
+
+.last-update {
+  font-size: 0.6rem;
+}
+
+.progress {
+  border-radius: 5px;
+}
+
+.rm-wrapper-inner {
+  max-width: 1080px;
+}
+
+.rm-header .photo {
+  height: 130px;
+  border-radius: 50%;
+}
+
+.rm-header .name {
+  font-size: 1.8rem;
+  letter-spacing: 0.1rem;
+  font-weight: 580;
+}
+
+.rm-header .title {
+  font-size: 1.4rem;
+}
+
+.rm-header a {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.rm-header a:hover {
+  color: white;
+}
+
+.rm-social {
+  font-size: 0.875rem;
+}
+
+.rm-social .fa-container {
+  font-size: 1rem;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 0.125rem;
+  background: white;
+  color: #0481b1;
+}
+
+.rm-section-title {
+  font-size: 1.25rem;
+  position: relative;
+}
+
+.rm-section-title:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1.5px;
+  background: #8d9aad;
+}
+
+.rm-section-content {
+  color: #58677c;
+}
+
+.rm-timeline {
+  padding-left: 2rem;
+}
+
+.rm-timeline:before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 100%;
+  background: #c6e3fb;
+  left: 6px;
+  top: 4px;
+  position: absolute;
+}
+
+.rm-timeline-item:before {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  left: -32px;
+  top: 3px;
+  width: 15px;
+  height: 15px;
+  border: 6px solid #0481b1;
+  background: white;
+  border-radius: 50%;
+}
+
+.rm-progress {
+  height: 0.5rem;
+}
+
+.rm-company-name {
+  color: #58677c;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.rm-position-time c-silver {
+  font-size: 0.875rem;
+  color: #aab4c3;
+}
+
+.rm-position-title {
+  font-size: 1.125rem;
+  color: #031e3e;
+}
+
+.rm-timeline-item-desc-heading {
+  font-size: 1rem;
+}
+
+.rm-skills-cat {
+  font-size: 1rem;
+  color: #031e3e;
+}
+
+.rm-skill-name {
+  font-size: 0.8125rem;
+  color: #031e3e;
+}
+
+.rm-degree {
+  color: #031e3e;
+}
+
+.rm-degree-org {
+  font-size: 0.875rem;
+}
+
+.rm-degree-time {
+  color: #aab4c3;
+  font-size: 0.875rem;
+}
+
+.rm-award-icon {
+  left: 0;
+  top: 4px;
+  color: #aab4c3;
+}
+
+.rm-award-name {
+  font-weight: bold;
+  color: #031e3e;
+}
+
+.rm-award-desc {
+  font-size: 0.875rem;
+}
+
+.rm-award-desc > a{
+  color: #58677c;
+}
+
+.rm-attribute-name{
+  font-weight: bold;
+  color: #031e3e;
+  font-size: 0.875rem;
+}
+
+.rm-lang-name {
+  color: #031e3e;
+}
+
+@media (max-width: 767.98px) {
+  .rm-wrapper {
+    padding-top: 0;
+  }
+
+  .rm-header {
+    height: auto;
+  }
+
+  .rm-header .picture {
+    width: 120px;
+    border-radius: 4px;
+  }
+}
