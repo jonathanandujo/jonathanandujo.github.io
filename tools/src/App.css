@@ -1,0 +1,45 @@
+.App {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.App-header {
+  background-color: #282c34;
+  color: white;
+  width: auto; /* Adjust width as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items to the start (left) */
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+nav ul li {
+  width: 100%;
+}
+
+nav ul li a {
+  display: block;
+  padding: 10px 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+  background-color: #61dafb;
+}
+
+nav ul li a.active {
+  background-color: #61dafb;
+}
+
+main {
+  flex: 1;
+}

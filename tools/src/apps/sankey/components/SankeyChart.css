@@ -1,0 +1,17 @@
+/* src/components/SankeyChart.css */
+
+.node rect {
+    stroke: #000;
+    stroke-width: 1px;
+  }
+  
+  .node text {
+    fill: #000;
+    font: 10px sans-serif;
+    pointer-events: none;
+  }
+  
+  .link path {
+    stroke-opacity: 0.5;
+  }
+  
