@@ -17,6 +17,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "npm run move-build",
+    "move-build": "npx cpx \"build/**/*\" ./ && npx rimraf build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
