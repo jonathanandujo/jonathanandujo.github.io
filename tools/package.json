@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && node fix-paths.js",
     "postbuild": "npm run move-build",
     "move-build": "npx cpx \"build/**/*\" ./ && npx rimraf build",
     "test": "react-scripts test",
