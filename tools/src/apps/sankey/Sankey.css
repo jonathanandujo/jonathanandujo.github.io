@@ -30,11 +30,33 @@ textarea {
   color: white;
   border: none;
   cursor: pointer;
-  font-size: 16px;
 }
 
 .btnSankey:hover {
   background-color: #45a049;
+}
+
+.button-group {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.small-button {
+  padding: 5px 10px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.small-button.selected {
+  background-color: #0056b3;
+}
+
+.small-button:hover {
+  background-color: #0056b3;
 }
 
 .settings {
@@ -66,4 +88,10 @@ textarea {
 
 .settings button:hover {
   background-color: #1976D2;
+}
+
+.error-label {
+  color: red;
+  font-weight: bold;
+  margin: 20px;
 }

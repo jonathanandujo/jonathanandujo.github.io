@@ -3,15 +3,15 @@ import '../style/Tabs.css';
 
 import SimpleReturn from './SimpleReturn';
 import MoneyDurationCalculator from './MoneyDurationCalculator'
-import Ideas from './Ideas'
+// import Ideas from './Ideas'
 
 const Tabs = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const tabs = [
-    { title: 'Simple Return', component: <SimpleReturn /> },
     { title: 'Money Duration', component: <MoneyDurationCalculator /> },
-    { title: 'Ideas', component: <Ideas /> },
+    { title: 'Simple Return', component: <SimpleReturn /> }
+    
   ];
 
   return (

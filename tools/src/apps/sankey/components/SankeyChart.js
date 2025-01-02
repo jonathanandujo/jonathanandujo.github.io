@@ -1,6 +1,4 @@
-// src/components/SankeyChart.js
-
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { select } from 'd3-selection';
 import { sankey, sankeyLinkHorizontal, sankeyCenter } from 'd3-sankey';
 import { formatCurrency } from '../utils/formatCurrency';
@@ -8,8 +6,25 @@ import './SankeyChart.css';
 
 const SankeyChart = ({ data, width, height, fontSize, colors }) => {
   const svgRef = useRef();
+  const [dataStatus, setDataStatus] = useState('valid');
+
 
   useEffect(() => {
+    if (!data || data.nodes.length === 0 || data.links.length === 0) {
+      setDataStatus('invalid');
+      return;
+    }
+
+    // Check for circular links
+    const hasCircularLinks = data.links.some(link => link.source === link.target);
+    if (hasCircularLinks) {
+      console.warn('Circular links detected in Sankey chart data');
+      setDataStatus('invalid');
+      return;
+    }
+
+
+    setDataStatus('valid');
     const svg = select(svgRef.current);
     const margin = { top: 0, right: 0, bottom: 10, left: 0 }; // Add margins
 
@@ -103,6 +118,10 @@ const SankeyChart = ({ data, width, height, fontSize, colors }) => {
       .attr("x", d => d.x1 + 6)
       .attr("text-anchor", "start");
   }, [data, width, height, fontSize, colors]);
+
+  if (dataStatus === 'invalid') {
+    return <div className="error-label">The data provided is incorrect or empty.</div>;
+  }
 
   return (
     <svg ref={svgRef} width={width} height={height} />

@@ -46,36 +46,37 @@ const SimpleReturn = () => {
               <th>App</th>
               <th>Yearly Rate</th>
               <th>Limit</th>
-              <th>Availability</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>MercadoPago</td>
+              <td>Mercado Pago</td>
               <td>15%</td>
-              <td>$23,000</td>
-              <td>Immediate</td>
+              <td>$25,000</td>
             </tr>
             <tr>
-              <td>Nu</td>
-              <td>14.5%</td>
-              <td>$190,000</td>
-              <td>90d</td>
+              <td>Stori</td>
+              <td>13.9%</td>
+              <td></td>
             </tr>
             <tr>
               <td>Uala</td>
-              <td>14%</td>
+              <td>13%</td>
               <td>$50,000</td>
-              <td>Immediate</td>
+            </tr>
+            <tr>
+              <td>Nu</td>
+              <td>12.25%</td>
+              <td>$200,000*</td>
             </tr>
             <tr>
               <td>Finsus</td>
-              <td>15%</td>
-              <td>$190,000</td>
-              <td>2y</td>
+              <td>13.59%</td>
+              <td>$200,000*</td>
             </tr>
           </tbody>
         </table>
+        *Prosofipo
       </div>
       <div className="simple-return">
         <h2>Simple Interest Calculator Return Investment</h2>

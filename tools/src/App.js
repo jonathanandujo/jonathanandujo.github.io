@@ -12,9 +12,9 @@ function App() {
         <header className="App-header">
           <nav>
             <ul>
-              <li><NavLink to="/calculator" activeClassName="active">Calculator</NavLink></li>
-              <li><NavLink to="/sankey" activeClassName="active">Sankey</NavLink></li>
-              <li><NavLink to="/matrix" activeClassName="active">Eisenhower Matrix</NavLink></li>
+              <li><NavLink to="/calculator" >Calculator</NavLink></li>
+              <li><NavLink to="/sankey" >Sankey</NavLink></li>
+              <li><NavLink to="/matrix" >Eisenhower Matrix</NavLink></li>
               {/* Add more menu items here */}
             </ul>
           </nav>
