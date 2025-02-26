@@ -3,6 +3,7 @@ import { HashRouter as Router, Route, Routes, NavLink, Navigate } from 'react-ro
 import Calculator from './apps/calculator/App';
 import Sankey from './apps/sankey/App';
 import Matrix from './apps/matrix/App';
+// import Minesweeper from './apps/minesweeper/Minesweeper';
 import './App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
               <li><NavLink to="/calculator" >Calculator</NavLink></li>
               <li><NavLink to="/sankey" >Sankey</NavLink></li>
               <li><NavLink to="/matrix" >Eisenhower Matrix</NavLink></li>
+              {/* <li><NavLink to="/minesweeper" >Minesweeper</NavLink></li> */}
               {/* Add more menu items here */}
             </ul>
           </nav>
@@ -25,6 +27,7 @@ function App() {
             <Route path="/calculator" element={<Calculator />} />
             <Route path="/sankey" element={<Sankey />} />
             <Route path="/matrix" element={<Matrix />} />
+            {/* <Route path="/minesweeper" element={<Minesweeper />} /> */}
           </Routes>
         </main>
       </div>

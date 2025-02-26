@@ -56,8 +56,8 @@ const SimpleReturn = () => {
             </tr>
             <tr>
               <td>Stori</td>
-              <td>13.9%</td>
-              <td></td>
+              <td>13%</td>
+              <td>$200,000*</td>
             </tr>
             <tr>
               <td>Uala</td>
