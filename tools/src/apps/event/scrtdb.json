@@ -1,0 +1,29 @@
+{
+    "events": [
+      {
+        "id": "boda del martin",
+        "date": "2025-05-23T18:00:00",
+        "song": {
+          "id": 101,
+          "name": "Bohemian Rhapsody"
+        }
+      },
+      {
+        "id": "ejemplo",
+        "date": "2025-05-10T14:30:00",
+        "song": {
+          "id": 102,
+          "name": "Hotel California"
+        }
+      },
+      {
+        "id": "3",
+        "date": "2025-06-15T20:45:00",
+        "song": {
+          "id": 103,
+          "name": "Imagine"
+        }
+      }
+    ]
+  }
+  
