@@ -1,0 +1,41 @@
+.App {
+  text-align: center;
+  min-height: 100vh;
+}
+
+.flex-grid {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 100vh;
+}
+.grid-item {
+  flex: 1 1 calc(50% - 25px);
+  background: #F90;
+  border-top: solid 1px #000;
+}
+.grid-item:nth-child(1) {
+  background: rgb(255, 114, 114);
+}
+.grid-item:nth-child(2) {
+  background: rgb(254, 189, 76);
+}
+.grid-item:nth-child(3) {
+  background: rgb(124, 253, 84);
+}
+.grid-item:nth-child(4) {
+  background: rgb(255, 252, 87);
+}
+
+.taskText {
+  margin-right: 10px;
+  font-size: 1.1rem;
+}
+
+ol {
+  list-style-type: none;
+}
+
+li {
+  list-style-type: none;
+}
