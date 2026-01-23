@@ -1,0 +1,446 @@
+/* Modern Resume Stylesheet - ATS-Friendly & Impact-Focused */
+
+:root {
+    --primary-color: #0078d4;
+    --secondary-color: #106ebe;
+    --accent-color: #00bcf2;
+    --text-primary: #1a1a1a;
+    --text-secondary: #4a4a4a;
+    --text-muted: #6b6b6b;
+    --bg-light: #f8f9fa;
+    --border-color: #e1e5e8;
+    --white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: var(--text-primary);
+    background: var(--bg-light);
+    -webkit-font-smoothing: antialiased;
+}
+
+.resume-container {
+    max-width: 850px;
+    margin: 20px auto;
+    background: var(--white);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Section */
+.header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: var(--white);
+    padding: 40px 50px;
+    text-align: center;
+}
+
+.header-name {
+    font-size: 32pt;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.header-title {
+    font-size: 14pt;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.95;
+    margin-bottom: 20px;
+}
+
+.header-contact {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 25px;
+    font-size: 10pt;
+}
+
+.header-contact a {
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.2s;
+}
+
+.header-contact a:hover {
+    opacity: 0.8;
+}
+
+.header-contact i {
+    font-size: 12pt;
+}
+
+/* Main Content */
+.content {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 0;
+}
+
+.main-column {
+    padding: 35px 40px;
+    border-right: 1px solid var(--border-color);
+}
+
+.side-column {
+    padding: 35px 30px;
+    background: var(--bg-light);
+}
+
+/* Section Headers */
+.section-title {
+    font-size: 12pt;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title i {
+    font-size: 14pt;
+}
+
+/* Professional Summary */
+.summary {
+    margin-bottom: 30px;
+}
+
+.summary-text {
+    font-size: 11pt;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    text-align: justify;
+}
+
+.summary-highlight {
+    background: linear-gradient(120deg, rgba(0, 120, 212, 0.1) 0%, rgba(0, 188, 242, 0.1) 100%);
+    padding: 15px 20px;
+    border-left: 4px solid var(--primary-color);
+    border-radius: 0 8px 8px 0;
+    margin-top: 15px;
+}
+
+.highlight-stats {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.stat-item {
+    padding: 0 15px;
+}
+
+.stat-number {
+    font-size: 20pt;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    font-size: 9pt;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Experience Section */
+.experience-item {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.experience-item:last-child {
+    margin-bottom: 0;
+}
+
+.job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.job-title {
+    font-size: 12pt;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.job-dates {
+    font-size: 10pt;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.job-company {
+    font-size: 11pt;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.job-location {
+    font-weight: 400;
+    color: var(--text-muted);
+}
+
+.job-achievements {
+    list-style: none;
+    padding-left: 0;
+}
+
+.job-achievements li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 8px;
+    font-size: 10.5pt;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.job-achievements li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.metric {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Side Column Sections */
+.side-section {
+    margin-bottom: 30px;
+}
+
+.side-section:last-child {
+    margin-bottom: 0;
+}
+
+.side-section .section-title {
+    font-size: 10pt;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+
+/* Skills */
+.skills-category {
+    margin-bottom: 15px;
+}
+
+.skills-category-title {
+    font-size: 9pt;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.skill-tag {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 9pt;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.skill-tag:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.skill-tag.highlight {
+    background: var(--primary-color);
+    color: var(--white);
+    border-color: var(--primary-color);
+}
+
+/* Certifications */
+.cert-item {
+    background: var(--white);
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 3px solid var(--primary-color);
+}
+
+.cert-name {
+    font-size: 10pt;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 3px;
+}
+
+.cert-issuer {
+    font-size: 9pt;
+    color: var(--text-muted);
+}
+
+/* Education */
+.edu-item {
+    margin-bottom: 12px;
+}
+
+.edu-degree {
+    font-size: 10pt;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.edu-school {
+    font-size: 9pt;
+    color: var(--text-muted);
+}
+
+/* Links */
+.links-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.link-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 9pt;
+    padding: 8px 12px;
+    background: var(--white);
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.link-item:hover {
+    color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+.link-item i {
+    font-size: 14pt;
+    color: var(--primary-color);
+    width: 20px;
+    text-align: center;
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        font-size: 10pt;
+    }
+
+    .resume-container {
+        box-shadow: none;
+        margin: 0;
+        max-width: 100%;
+    }
+
+    .header {
+        padding: 30px 40px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .header-name {
+        font-size: 26pt;
+    }
+
+    .content {
+        grid-template-columns: 1fr 240px;
+    }
+
+    .main-column {
+        padding: 25px 30px;
+    }
+
+    .side-column {
+        padding: 25px 20px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .skill-tag.highlight {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+@page {
+    size: letter;
+    margin: 0;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .content {
+        grid-template-columns: 1fr;
+    }
+
+    .main-column {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .header-contact {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .job-header {
+        flex-direction: column;
+    }
+}
+
+/* Last Update */
+.last-update {
+    text-align: center;
+    padding: 15px;
+    font-size: 9pt;
+    color: var(--text-muted);
+    background: var(--bg-light);
+}
