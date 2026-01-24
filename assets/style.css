@@ -1,166 +1,676 @@
-@font-face {
-    font-family: 'CodecPro';
-    src: url('codec-pro.regular.eot');
-    /* IE9 Compat Modes */
-    src: url('codec-pro.regular.eot?#iefix') format('embedded-opentype'),
-        /* IE6-IE8 */
-        url('codec-pro.regular.woff') format('woff'),
-        /* Modern Browsers */
-        url('codec-pro.regular.ttf') format('truetype')
-        /* Safari, Android, iOS */
-}
+/*
+ * Professional Resume Stylesheet
+ * Harvard/Stanford Format - ATS Optimized
+ * Mobile-first, Print-friendly (Single Page)
+ */
 
+/* ===== CSS VARIABLES ===== */
 :root {
-    --primary-color: #000e20;
-    --secondary-color: #001b3e;
+    --primary-color: #1a1a1a;
+    --secondary-color: #2c3e50;
+    --text-color: #333333;
+    --text-muted: #666666;
+    --border-color: #333333;
+    --bg-color: #ffffff;
+    --bg-page: #e8e8e8;
+    --font-main: 'Georgia', 'Times New Roman', Times, serif;
+    --font-heading: 'Helvetica Neue', Arial, sans-serif;
 }
 
-.container {
-    display: flex;
-    padding: 0px;
-    min-width: 100%;
+/* ===== RESET & BASE ===== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-.leftPanel {
-    margin-top: 10px;
-    flex: 1;
-    min-width: 240px;
-    padding-right: 5px;
-}
-
-.bodyPanel {
-    border-left: 1px solid #000;
-    padding-left: 10px;
-}
-
-@media print {
-
-    .no-print,
-    .no-print * {
-        display: none !important;
-    }
-
-    @page {
-        /* size: auto;   auto is the initial value  */
-
-        /* this affects the margin in the printer settings */
-        margin: 0mm 0mm 0mm 0mm;
-    }
-}
-
-.print {
-    display: none;
-}
-
-* {
-    font-family: 'CodecPro';
-    font-size: 0.94rem;
+html {
+    font-size: 16px;
 }
 
 body {
-    background: #b1b1b1;
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--text-color);
+    background: var(--bg-page);
+}
+
+/* ===== LINKS ===== */
+a {
     color: var(--primary-color);
+    text-decoration: none;
 }
 
-hr {
-    margin: 7px;
+a:hover {
+    text-decoration: underline;
 }
 
-a,
-a:visited,
-a:active a:hover {
-    color: var(--primary-color);
+/* ===== DOWNLOAD BUTTON ===== */
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 16px;
+    margin-top: 12px;
+    background: var(--secondary-color);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 500;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.2s ease;
 }
 
+.download-btn:hover {
+    background: var(--primary-color);
+    text-decoration: none;
+    color: #fff;
+}
+
+.download-btn i {
+    font-size: 0.85rem;
+}
+
+/* ===== PAGE CONTAINER ===== */
 .page {
-    max-width: 1080px;
-    background-color: #fff;
-    text-align: left;
-    border: 1px solid rgb(20, 20, 20);
-    margin: 10px auto;
+    max-width: 850px;
+    margin: 20px auto;
+    background: var(--bg-color);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .sheet {
-    margin: 0px 13px 0px 13px;
+    padding: 30px 40px;
 }
 
+/* ===== HEADER SECTION ===== */
 .header {
     text-align: center;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 15px;
 }
 
 .titleName {
-    font-size: 2rem !important;
-    font-weight: bold;
-    letter-spacing: 0.3rem;
-    color: var(--secondary-color);
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12rem;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    margin-bottom: 3px;
 }
 
 .titlePosition {
-    font-size: 1.5rem !important;
-    letter-spacing: 0.2rem;
-    font-weight: bold;
-}
-
-.sectionHeader {
-    font-weight: bold;
-    text-align: left;
-    font-size: 1.1rem !important;
-    letter-spacing: 0.1rem;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.08rem;
     color: var(--secondary-color);
+    margin-bottom: 12px;
 }
 
-.areaDescription {
-    margin-top: 10px;
-    letter-spacing: 0.04rem;
-    text-align: left;
+.titleContact {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    font-size: 0.85rem;
+}
+
+.titleContact a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-color);
+}
+
+.titleContact i {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+/* ===== SECTION HEADERS ===== */
+.sectionHeader {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 3px;
+    margin-bottom: 8px;
+    margin-top: 12px;
+}
+
+/* ===== PROFESSIONAL SUMMARY ===== */
+.professionalSummary {
+    margin-bottom: 5px;
+}
+
+.professionalSummary .sectionHeader {
+    margin-top: 0;
 }
 
 .professionalSummaryDescription {
     text-align: justify;
+    line-height: 1.5;
+    font-size: 0.88rem;
 }
 
-.professionalSummary {
-    border-bottom: 1px solid #000;
+/* ===== MAIN LAYOUT ===== */
+.container {
+    display: flex;
+    gap: 25px;
 }
 
+.leftPanel {
+    flex: 0 0 200px;
+    order: 2;
+}
+
+.bodyPanel {
+    flex: 1;
+    order: 1;
+    border-right: 1px solid var(--border-color);
+    padding-right: 20px;
+}
+
+/* ===== EXPERIENCE SECTION ===== */
 .professionalExperience {
-    margin-top: 10px;
+    margin-top: 0;
+}
+
+.professionalExperience .sectionHeader {
+    margin-top: 0;
+}
+
+.professionalDescription {
+    margin-top: 8px;
 }
 
 .job {
-    text-align: left;
+    margin-bottom: 12px;
+}
+
+.job:last-child {
+    margin-bottom: 0;
 }
 
 .jobTitle {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-bottom: 1px;
+    font-size: 0.88rem;
 }
 
-.titleContact {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 5px;
-    margin-left: 30px;
-    margin-right: 30px;
+.jobTitle b {
+    font-family: var(--font-heading);
+    font-weight: 600;
 }
 
-.educationDescription {
-    text-align: left;
+.jobDescription {
+    margin-top: 4px;
+}
+
+.jobDescription ul,
+.list {
+    margin: 0;
+    padding-left: 16px;
+}
+
+.jobDescription li,
+.list li {
+    margin-bottom: 2px;
+    line-height: 1.4;
+    font-size: 0.85rem;
+}
+
+/* ===== SKILLS SECTION ===== */
+.areasOfExpertise {
+    margin-bottom: 10px;
+}
+
+.areaDescription {
+    margin-bottom: 8px;
+}
+
+.areaDescription > b {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02rem;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.skill ul {
+    padding-left: 16px;
+    margin: 0;
+}
+
+.skill li {
+    font-size: 0.82rem;
+    margin-bottom: 1px;
+    line-height: 1.3;
+}
+
+/* ===== CERTIFICATIONS ===== */
+.certifications {
+    margin-bottom: 10px;
 }
 
 .certificationDetail {
-    text-align: left;
+    font-size: 0.82rem;
+    margin-bottom: 5px;
+    line-height: 1.3;
 }
 
-ul {
-    padding-left: 25px;
+.certificationDetail b {
+    display: block;
+    font-weight: 600;
+}
+
+/* ===== EDUCATION ===== */
+.education {
+    margin-bottom: 10px;
+}
+
+.educationDescription {
+    font-size: 0.82rem;
+    margin-bottom: 5px;
+    line-height: 1.3;
+}
+
+.educationDescription b {
+    display: block;
+    font-weight: 600;
+}
+
+/* ===== QR CODES ===== */
+.qrCodes {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
 }
 
 .qrCodes img {
-    width: 75px;
-    height: 75px;
+    width: 55px;
+    height: 55px;
+    border: 1px solid var(--border-color);
 }
 
+/* ===== FOOTER ===== */
 .last-update {
-    font-size: 0.6rem;
+    text-align: right;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    padding-top: 10px;
+    margin-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+/* ===== UTILITY ===== */
+hr {
+    display: none;
+}
+
+b {
+    font-weight: 600;
+}
+
+/* ========================================
+   RESPONSIVE - TABLET
+   ======================================== */
+@media screen and (max-width: 850px) {
+    .sheet {
+        padding: 25px 30px;
+    }
+
+    .titleName {
+        font-size: 1.6rem;
+    }
+
+    .container {
+        gap: 18px;
+    }
+
+    .leftPanel {
+        flex: 0 0 180px;
+    }
+
+    .bodyPanel {
+        padding-right: 15px;
+    }
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE (600px and below)
+   Order: Summary → Experience → Certs → Education → Skills
+   ======================================== */
+@media screen and (max-width: 600px) {
+    body {
+        background: var(--bg-color);
+    }
+
+    .page {
+        margin: 0;
+        box-shadow: none;
+    }
+
+    .sheet {
+        padding: 15px;
+    }
+
+    .header {
+        padding-bottom: 12px;
+        margin-bottom: 12px;
+    }
+
+    .titleName {
+        font-size: 1.4rem;
+        letter-spacing: 0.08rem;
+    }
+
+    .titlePosition {
+        font-size: 0.95rem;
+    }
+
+    .titleContact {
+        flex-direction: column;
+        gap: 6px;
+        align-items: center;
+    }
+
+    /* Flexbox column with order for mobile */
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    /* Experience comes first on mobile */
+    .bodyPanel {
+        order: 1;
+        border-right: none;
+        padding-right: 0;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 15px;
+        margin-bottom: 10px;
+    }
+
+    /* Left panel content reordered via inner elements */
+    .leftPanel {
+        order: 2;
+        flex: none;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Order within leftPanel for mobile */
+    .certifications {
+        order: 1;
+    }
+
+    .education {
+        order: 2;
+    }
+
+    .areasOfExpertise {
+        order: 3;
+        border-top: 1px solid var(--border-color);
+        padding-top: 10px;
+        margin-top: 10px;
+    }
+
+    .qrCodes {
+        order: 4;
+        display: none;
+    }
+
+    /* Skills in 2 columns on mobile */
+    .areasOfExpertise .areaDescription {
+        display: inline-block;
+        width: 48%;
+        vertical-align: top;
+        margin-right: 2%;
+    }
+
+    .sectionHeader {
+        font-size: 0.85rem;
+        margin-top: 12px;
+    }
+
+    .jobTitle {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .jobDescription li {
+        font-size: 0.85rem;
+    }
+}
+
+/* ========================================
+   PRINT STYLES - Single Page PDF
+   ======================================== */
+@media print {
+    /* Hide non-print elements */
+    .no-print,
+    .no-print * {
+        display: none !important;
+    }
+
+    /* Page setup - tighter margins for single page */
+    @page {
+        size: letter;
+        margin: 0.3in 0.4in 0.3in 0.4in;
+    }
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    html, body {
+        font-size: 9pt;
+        line-height: 1.25;
+        background: white !important;
+    }
+
+    .page {
+        max-width: 100%;
+        margin: 0;
+        box-shadow: none;
+        border: none;
+    }
+
+    .sheet {
+        padding: 0;
+    }
+
+    /* Header - compact */
+    .header {
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+        border-bottom-width: 1px;
+    }
+
+    .titleName {
+        font-size: 16pt;
+        margin-bottom: 2px;
+    }
+
+    .titlePosition {
+        font-size: 10pt;
+        margin-bottom: 6px;
+    }
+
+    .titleContact {
+        font-size: 8pt;
+        gap: 5px 15px;
+    }
+
+    .titleContact i {
+        display: none;
+    }
+
+    /* Section headers - compact */
+    .sectionHeader {
+        font-size: 9pt;
+        margin-top: 8px;
+        margin-bottom: 5px;
+        padding-bottom: 2px;
+    }
+
+    .professionalSummary .sectionHeader {
+        margin-top: 0;
+    }
+
+    /* Summary - compact */
+    .professionalSummary {
+        margin-bottom: 3px;
+    }
+
+    .professionalSummaryDescription {
+        font-size: 8.5pt;
+        line-height: 1.3;
+    }
+
+    /* Layout - tighter */
+    .container {
+        gap: 15px;
+    }
+
+    .leftPanel {
+        flex: 0 0 155px;
+    }
+
+    .bodyPanel {
+        padding-right: 12px;
+    }
+
+    /* Jobs - compact */
+    .professionalDescription {
+        margin-top: 5px;
+    }
+
+    .job {
+        margin-bottom: 7px;
+    }
+
+    .jobTitle {
+        font-size: 8.5pt;
+        margin-bottom: 1px;
+    }
+
+    .jobDescription {
+        margin-top: 2px;
+    }
+
+    .jobDescription ul,
+    .list {
+        padding-left: 12px;
+    }
+
+    .jobDescription li,
+    .list li {
+        font-size: 8pt;
+        margin-bottom: 1px;
+        line-height: 1.25;
+    }
+
+    /* Skills - compact */
+    .areasOfExpertise {
+        margin-bottom: 6px;
+    }
+
+    .areasOfExpertise .sectionHeader {
+        margin-top: 0;
+    }
+
+    .areaDescription {
+        margin-bottom: 5px;
+    }
+
+    .areaDescription > b {
+        font-size: 7pt;
+        margin-bottom: 2px;
+    }
+
+    .skill ul {
+        padding-left: 12px;
+    }
+
+    .skill li {
+        font-size: 7.5pt;
+        line-height: 1.2;
+        margin-bottom: 0;
+    }
+
+    /* Certifications - compact */
+    .certifications {
+        margin-bottom: 6px;
+    }
+
+    .certificationDetail {
+        font-size: 7.5pt;
+        margin-bottom: 3px;
+        line-height: 1.2;
+    }
+
+    /* Education - compact */
+    .education {
+        margin-bottom: 6px;
+    }
+
+    .educationDescription {
+        font-size: 7.5pt;
+        margin-bottom: 3px;
+        line-height: 1.2;
+    }
+
+    /* QR codes - smaller for print */
+    .qrCodes {
+        margin-top: 6px;
+        gap: 5px;
+    }
+
+    .qrCodes img {
+        width: 40px;
+        height: 40px;
+    }
+
+    /* Prevent page breaks */
+    .job,
+    .professionalSummary,
+    .areasOfExpertise,
+    .certifications,
+    .education {
+        page-break-inside: avoid;
+    }
+
+    /* Hide footer in print */
+    .last-update {
+        display: none;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
 }
