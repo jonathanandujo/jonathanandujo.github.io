@@ -46,32 +46,35 @@ a:hover {
     text-decoration: underline;
 }
 
-/* ===== DOWNLOAD BUTTON ===== */
+/* ===== DOWNLOAD BUTTON (Floating FAB) ===== */
 .download-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--secondary-color);
+    color: #fff;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 8px 16px;
-    margin-top: 12px;
-    background: var(--secondary-color);
-    color: #fff;
-    font-family: var(--font-heading);
-    font-size: 0.8rem;
-    font-weight: 500;
-    border-radius: 4px;
     text-decoration: none;
-    transition: background 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    z-index: 9999;
 }
 
 .download-btn:hover {
     background: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
     text-decoration: none;
     color: #fff;
 }
 
 .download-btn i {
-    font-size: 0.85rem;
+    font-size: 1.1rem;
 }
 
 /* ===== PAGE CONTAINER ===== */
