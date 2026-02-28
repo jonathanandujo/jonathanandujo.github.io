@@ -5,11 +5,14 @@ import Sankey from './apps/sankey/App';
 import Matrix from './apps/matrix/App';
 import Event from './apps/event/App';
 import Patrimony from './apps/patrimony/App';
+import SyncPanel from './supabase/SyncPanel';
+import { getSyncAlias } from './supabase/supabaseClient';
 // import Minesweeper from './apps/minesweeper/Minesweeper';
 import './App.css';
 
 function App() {
   const [menuCollapsed, setMenuCollapsed] = useState(false);
+  const [syncAlias, setSyncAlias] = useState(getSyncAlias());
 
   return (
     <Router>
@@ -31,14 +34,15 @@ function App() {
               {/* <li><NavLink to="/minesweeper" title="Minesweeper"><span className="nav-icon">💣</span><span className="nav-label">Minesweeper</span></NavLink></li> */}
             </ul>
           </nav>
+          <SyncPanel collapsed={menuCollapsed} onAliasChange={setSyncAlias} />
         </header>
         <main>
           <Routes>
             <Route path="/" element={<Navigate to="/calculator" />} />
             <Route path="/calculator" element={<Calculator />} />
-            <Route path="/sankey" element={<Sankey />} />
+            <Route path="/sankey" element={<Sankey syncAlias={syncAlias} />} />
             <Route path="/matrix" element={<Matrix />} />
-            <Route path="/patrimony" element={<Patrimony />} />
+            <Route path="/patrimony" element={<Patrimony syncAlias={syncAlias} />} />
             <Route path="/event/:id" element={<Event />} />
             {/* <Route path="/minesweeper" element={<Minesweeper />} /> */}
           </Routes>

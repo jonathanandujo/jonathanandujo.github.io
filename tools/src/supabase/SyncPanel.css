@@ -1,0 +1,222 @@
+/* ── Sync panel (bottom of sidebar) ────────────── */
+.sync-panel {
+  margin-top: auto;
+  width: 100%;
+  position: relative;
+}
+
+.sync-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  background: none;
+  border: none;
+  border-top: 1px solid #3a3f47;
+  color: #9ca3af;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color .2s;
+}
+
+.sync-toggle:hover {
+  color: #61dafb;
+}
+
+.sync-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #6b7280;
+  flex-shrink: 0;
+  transition: background .3s;
+}
+
+.sync-dot.connected {
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e80;
+}
+
+.sync-label {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* ── Centered modal overlay ─────────────────────── */
+.sync-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.sync-modal {
+  background: #1e1e2e;
+  border: 1px solid #3a3f47;
+  border-radius: 12px;
+  padding: 28px 32px;
+  width: 380px;
+  max-width: 90vw;
+  box-shadow: 0 12px 40px rgba(0,0,0,.6);
+  color: #e5e7eb;
+}
+
+.sync-modal h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: #61dafb;
+}
+
+.sync-modal-hint {
+  font-size: 13px;
+  color: #9ca3af;
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+.sync-modal label {
+  display: block;
+  font-size: 13px;
+  color: #9ca3af;
+  margin-bottom: 12px;
+}
+
+.sync-modal input {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px solid #3a3f47;
+  border-radius: 6px;
+  background: #111827;
+  color: #e5e7eb;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.sync-modal input:focus {
+  outline: none;
+  border-color: #61dafb;
+}
+
+.sync-modal-status {
+  font-size: 13px;
+  color: #22c55e;
+  margin: 0 0 12px;
+}
+
+.sync-modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn-sync-save {
+  padding: 5px 14px;
+  background: #22c55e;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+}
+.btn-sync-save:hover { background: #16a34a; }
+
+.btn-sync-disconnect {
+  padding: 5px 14px;
+  background: #ef4444;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+}
+.btn-sync-disconnect:hover { background: #dc2626; }
+
+.btn-sync-cancel {
+  padding: 5px 14px;
+  background: #374151;
+  border: none;
+  border-radius: 6px;
+  color: #d1d5db;
+  font-size: 13px;
+  cursor: pointer;
+}
+.btn-sync-cancel:hover { background: #4b5563; }
+
+.sync-status-text {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #22c55e;
+}
+
+/* ── Inline sync buttons (inside apps) ──────────── */
+.supabase-sync-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-push, .btn-pull {
+  padding: 5px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-push {
+  background: #3b82f6;
+  color: #fff;
+}
+.btn-push:hover { background: #2563eb; }
+.btn-push:disabled { opacity: .5; cursor: default; }
+
+.btn-pull {
+  background: #8b5cf6;
+  color: #fff;
+}
+.btn-pull:hover { background: #7c3aed; }
+.btn-pull:disabled { opacity: .5; cursor: default; }
+
+.sync-info {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.sync-error {
+  font-size: 11px;
+  color: #ef4444;
+}
+
+.sync-error-block {
+  font-size: 12px;
+  color: #ef4444;
+  margin: 8px 0 0;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #61dafb;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  text-decoration: underline;
+}
+.btn-link:hover {
+  color: #93e4fd;
+}
+
+.btn-sync-save:disabled {
+  opacity: .5;
+  cursor: default;
+}

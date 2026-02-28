@@ -4,9 +4,11 @@ import DonutChart from './components/DonutChart';
 import CategorySection from './components/CategorySection';
 import ItemModal from './components/ItemModal';
 import { CATEGORIES, DEFAULT_DATA, STORAGE_KEY } from './dataModel';
+import { useSupabaseSync } from '../../supabase/useSupabaseSync';
+import '../../supabase/SyncPanel.css';
 import './Patrimony.css';
 
-const Patrimony = () => {
+const Patrimony = ({ syncAlias }) => {
   const [data, setData] = useState(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
@@ -17,6 +19,7 @@ const Patrimony = () => {
   const [modalState, setModalState] = useState(null); // { categoryKey, index? }
   const [allCollapsed, setAllCollapsed] = useState(false);
   const fileInputRef = useRef();
+  const { push, pull, syncing, lastSync, error: syncError, isConfigured } = useSupabaseSync('patrimony', syncAlias);
 
   // ── Persist whenever data changes ────────────────
   useEffect(() => {
@@ -123,6 +126,22 @@ const Patrimony = () => {
         <button className="btn-danger" onClick={handleClear}>
           🗑 Clear All
         </button>
+        {isConfigured && (
+          <span className="supabase-sync-bar">
+            <button className="btn-push" disabled={syncing} onClick={() => push(data)}>
+              ☁↑ Push
+            </button>
+            <button className="btn-pull" disabled={syncing} onClick={async () => {
+              const remote = await pull();
+              if (remote) setData({ ...DEFAULT_DATA, ...remote });
+            }}>
+              ☁↓ Pull
+            </button>
+            {syncing && <span className="sync-info">Syncing…</span>}
+            {syncError && <span className="sync-error">{syncError}</span>}
+            {lastSync && !syncing && <span className="sync-info">Last: {lastSync.toLocaleTimeString()}</span>}
+          </span>
+        )}
       </div>
 
       <SummaryCards data={data} categories={CATEGORIES} />

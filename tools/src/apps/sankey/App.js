@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SankeyChart from './components/SankeyChart';
 import { parseInputData } from './utils/parseInputData';
+import { useSupabaseSync } from '../../supabase/useSupabaseSync';
+import '../../supabase/SyncPanel.css';
 import './Sankey.css'; // Importing the CSS file for styling
 
 const defaultChartData = `//Income USD example
@@ -39,7 +41,7 @@ const colorOptions = [
   ["#393b79", "#5254a3", "#6b6ecf", "#9c9ede", "#637939", "#8ca252", "#b5cf6b", "#8c6d31", "#bd9e39", "#e7ba52"]
 ];
 
-const Sankey = () => {
+const Sankey = ({ syncAlias }) => {
   const [inputText, setInputText] = useState(defaultChartData);  // Default value
   const [sankeyData, setSankeyData] = useState(null);
   const [width, setWidth] = useState(1200);
@@ -48,6 +50,7 @@ const Sankey = () => {
   const [colorScheme, setColorScheme] = useState(0);
   const [selectedSankeyNumber, setSelectedSankeyNumber] = useState(1);
   const svgContainerRef = useRef(); // Using container ref to ensure correct referencing
+  const { push, pull, syncing, lastSync, error: syncError, isConfigured } = useSupabaseSync(`sankey-${selectedSankeyNumber}`, syncAlias);
 
   useEffect(() => {
     // Retrieve stored data from localStorage on initial load
@@ -168,6 +171,28 @@ const Sankey = () => {
         />
         <button className='btnSankey' onClick={handleGenerateChartButton}>Save Sankey Chart</button>
         <button className='btnSankey' onClick={handleDownload}>Download as PNG</button>
+        {isConfigured && (
+          <div className="supabase-sync-bar" style={{ margin: '6px 0' }}>
+            <button className="btn-push" disabled={syncing} onClick={() => push({ text: inputText, settings: { width, height, fontSize, colorScheme } })}>
+              ☁↑ Push #{selectedSankeyNumber}
+            </button>
+            <button className="btn-pull" disabled={syncing} onClick={async () => {
+              const remote = await pull();
+              if (remote?.text) setInputText(remote.text);
+              if (remote?.settings) {
+                setWidth(remote.settings.width ?? width);
+                setHeight(remote.settings.height ?? height);
+                setFontSize(remote.settings.fontSize ?? fontSize);
+                setColorScheme(remote.settings.colorScheme ?? colorScheme);
+              }
+            }}>
+              ☁↓ Pull #{selectedSankeyNumber}
+            </button>
+            {syncing && <span className="sync-info">Syncing…</span>}
+            {syncError && <span className="sync-error">{syncError}</span>}
+            {lastSync && !syncing && <span className="sync-info">Last: {lastSync.toLocaleTimeString()}</span>}
+          </div>
+        )}
         <div className="settings">
           <label>
             Width:
