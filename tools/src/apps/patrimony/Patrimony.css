@@ -468,3 +468,162 @@
   .items-table td { white-space: normal; }
   .modal { padding: 18px; width: 100%; }
 }
+
+/* ── Add Custom Category button ──────────────────── */
+.btn-add-category {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 24px;
+  background: transparent;
+  border: 2px dashed #9ca3af;
+  border-radius: 10px;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-add-category:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: rgba(59,130,246,.04);
+}
+
+/* ── Custom category badge ───────────────────────── */
+.custom-badge {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #dbeafe;
+  color: #2563eb;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+/* ── Category action buttons in header ───────────── */
+.cat-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  opacity: 0.6;
+  transition: opacity .15s;
+}
+.cat-action-btn:hover {
+  opacity: 1;
+  background: rgba(0,0,0,.06);
+}
+.cat-delete-btn:hover {
+  background: rgba(239,68,68,.1);
+}
+
+/* ── Category Modal extras ───────────────────────── */
+.category-modal {
+  max-width: 420px;
+}
+
+.emoji-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.emoji-input {
+  width: 48px;
+  text-align: center;
+  font-size: 20px;
+  padding: 4px;
+}
+.emoji-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+.emoji-btn {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 16px;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+.emoji-btn.selected {
+  border-color: #3b82f6;
+  background: #dbeafe;
+}
+.emoji-btn:hover {
+  background: #f3f4f6;
+}
+
+.type-toggle {
+  display: flex;
+  gap: 6px;
+}
+.toggle-btn {
+  flex: 1;
+  padding: 8px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all .15s;
+}
+.toggle-btn.active-asset {
+  border-color: #22c55e;
+  background: #f0fdf4;
+  color: #16a34a;
+}
+.toggle-btn.active-liability {
+  border-color: #ef4444;
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.fields-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.field-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.field-tag.built-in {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+.field-tag.custom {
+  background: #dbeafe;
+  color: #2563eb;
+}
+.field-tag.custom button {
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+.add-field-row {
+  display: flex;
+  gap: 6px;
+}
+.add-field-row input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+}

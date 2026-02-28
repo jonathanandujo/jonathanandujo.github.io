@@ -6,7 +6,7 @@ const formatMoney = (n) => {
   return n < 0 ? `-$${formatted}` : `$${formatted}`;
 };
 
-const CategorySection = ({ category, items, forceCollapsed, onAdd, onEdit, onDelete }) => {
+const CategorySection = ({ category, items, forceCollapsed, onAdd, onEdit, onDelete, isCustom, onEditCategory, onDeleteCategory }) => {
   const [open, setOpen] = useState(true);
 
   React.useEffect(() => {
@@ -23,8 +23,17 @@ const CategorySection = ({ category, items, forceCollapsed, onAdd, onEdit, onDel
           <span className="icon">{category.icon}</span>
           <h2>{category.label}</h2>
           <span className="count">{items.length}</span>
+          {isCustom && (
+            <span className="custom-badge">Custom</span>
+          )}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          {isCustom && onEditCategory && (
+            <button className="cat-action-btn" title="Edit category" onClick={(e) => { e.stopPropagation(); onEditCategory(); }}>⚙️</button>
+          )}
+          {isCustom && onDeleteCategory && (
+            <button className="cat-action-btn cat-delete-btn" title="Delete category" onClick={(e) => { e.stopPropagation(); onDeleteCategory(); }}>🗑️</button>
+          )}
           <span className={`total ${isLiability ? 'negative' : 'positive'}`}>
             {isLiability ? `-${formatMoney(total)}` : formatMoney(total)}
           </span>

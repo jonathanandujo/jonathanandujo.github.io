@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import SummaryCards from './components/SummaryCards';
 import DonutChart from './components/DonutChart';
 import CategorySection from './components/CategorySection';
 import ItemModal from './components/ItemModal';
+import CategoryModal from './components/CategoryModal';
 import { CATEGORIES, DEFAULT_DATA, STORAGE_KEY } from './dataModel';
 import { useSupabaseSync } from '../../supabase/useSupabaseSync';
 import '../../supabase/SyncPanel.css';
@@ -17,9 +18,19 @@ const Patrimony = ({ syncAlias }) => {
     return DEFAULT_DATA;
   });
   const [modalState, setModalState] = useState(null); // { categoryKey, index? }
+  const [catModalState, setCatModalState] = useState(null); // null | { category? } for add/edit
   const [allCollapsed, setAllCollapsed] = useState(false);
   const fileInputRef = useRef();
   const { push, pull, syncing, lastSync, error: syncError, isConfigured } = useSupabaseSync('patrimony', syncAlias);
+
+  // ── Merge built-in + custom categories (assets first, then liabilities) ─
+  const allCategories = useMemo(() => {
+    const custom = (data._customCategories || []);
+    const all = [...CATEGORIES, ...custom];
+    const assets = all.filter((c) => c.type === 'asset');
+    const liabilities = all.filter((c) => c.type === 'liability');
+    return [...assets, ...liabilities];
+  }, [data._customCategories]);
 
   // ── Persist whenever data changes ────────────────
   useEffect(() => {
@@ -97,9 +108,39 @@ const Patrimony = ({ syncAlias }) => {
     setData({ ...DEFAULT_DATA });
   };
 
+  // ── Custom Category CRUD ─────────────────────────
+  const handleSaveCategory = (catDef) => {
+    setData((prev) => {
+      const updated = { ...prev };
+      const customs = [...(updated._customCategories || [])];
+      const existIdx = customs.findIndex((c) => c.key === catDef.key);
+      if (existIdx >= 0) {
+        customs[existIdx] = catDef;
+      } else {
+        customs.push(catDef);
+        updated[catDef.key] = []; // init empty data array
+      }
+      updated._customCategories = customs;
+      return updated;
+    });
+    setCatModalState(null);
+  };
+
+  const handleDeleteCategory = (key) => {
+    const cat = (data._customCategories || []).find((c) => c.key === key);
+    if (!cat) return;
+    if (!window.confirm(`Delete category "${cat.label}" and all its items?`)) return;
+    setData((prev) => {
+      const updated = { ...prev };
+      updated._customCategories = (updated._customCategories || []).filter((c) => c.key !== key);
+      delete updated[key];
+      return updated;
+    });
+  };
+
   // ── Determine current modal's category definition ─
   const modalCategory = modalState
-    ? CATEGORIES.find((c) => c.key === modalState.categoryKey)
+    ? allCategories.find((c) => c.key === modalState.categoryKey)
     : null;
   const modalItem =
     modalState && modalState.index !== null && modalState.index !== undefined
@@ -144,23 +185,36 @@ const Patrimony = ({ syncAlias }) => {
         )}
       </div>
 
-      <SummaryCards data={data} categories={CATEGORIES} />
+      <SummaryCards data={data} categories={allCategories} />
 
       <div className="chart-panel">
-        <DonutChart data={data} categories={CATEGORIES} size={150} />
+        <DonutChart data={data} categories={allCategories} size={150} />
       </div>
 
-      {CATEGORIES.map((cat) => (
-        <CategorySection
-          key={cat.key}
-          category={cat}
-          items={data[cat.key] || []}
-          forceCollapsed={allCollapsed}
-          onAdd={openAddModal}
-          onEdit={openEditModal}
-          onDelete={handleDelete}
-        />
-      ))}
+      {allCategories.map((cat) => {
+        const isCustom = cat.key.startsWith('custom_');
+        return (
+          <CategorySection
+            key={cat.key}
+            category={cat}
+            items={data[cat.key] || []}
+            forceCollapsed={allCollapsed}
+            onAdd={openAddModal}
+            onEdit={openEditModal}
+            onDelete={handleDelete}
+            isCustom={isCustom}
+            onEditCategory={isCustom ? () => setCatModalState({ category: cat }) : undefined}
+            onDeleteCategory={isCustom ? () => handleDeleteCategory(cat.key) : undefined}
+          />
+        );
+      })}
+
+      <button
+        className="btn-add-category"
+        onClick={() => setCatModalState({})}
+      >
+        + Add Custom Category
+      </button>
 
       {modalState && modalCategory && (
         <ItemModal
@@ -168,6 +222,14 @@ const Patrimony = ({ syncAlias }) => {
           item={modalItem}
           onSave={handleSave}
           onCancel={() => setModalState(null)}
+        />
+      )}
+
+      {catModalState && (
+        <CategoryModal
+          category={catModalState.category || null}
+          onSave={handleSaveCategory}
+          onCancel={() => setCatModalState(null)}
         />
       )}
     </div>

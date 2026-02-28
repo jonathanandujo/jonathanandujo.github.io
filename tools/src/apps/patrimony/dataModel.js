@@ -72,6 +72,10 @@ export const DEFAULT_DATA = {
   creditCards: [],
   loans: [],
   otherDebts: [],
+  _customCategories: [],
 };
 
 export const STORAGE_KEY = 'patrimonyData';
+
+/** Default fields every custom category always includes */
+export const REQUIRED_FIELDS = ['name', 'value', 'notes'];
