@@ -1,0 +1,163 @@
+.penguin-game-view {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #0b1a2e;
+}
+
+.game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── HUD ── */
+.game-hud {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.game-score {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.game-high-score {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fbbf24;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.game-lives {
+  display: flex;
+  gap: 6px;
+}
+
+.life-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #38bdf8;
+  transition: background 0.3s;
+}
+
+.life-icon.lost {
+  background: #555;
+}
+
+/* ── Overlay screens ── */
+.game-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(11, 26, 46, 0.92);
+  color: #fff;
+  z-index: 20;
+  text-align: center;
+  padding: 24px;
+}
+
+.penguin-title-icon {
+  font-size: 72px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.game-overlay h1 {
+  font-size: 32px;
+  margin: 8px 0 12px;
+}
+
+.game-overlay p {
+  font-size: 15px;
+  max-width: 360px;
+  color: #b0c4de;
+}
+
+.game-btn {
+  margin-top: 20px;
+  padding: 12px 36px;
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.game-btn:hover {
+  transform: scale(1.05);
+}
+
+.game-final-score {
+  font-size: 56px;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.game-high-score-display {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fbbf24;
+  margin-top: 4px;
+}
+
+.discount-banner {
+  margin-top: 16px;
+  padding: 14px 20px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid #38bdf8;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.game-home-link {
+  margin-top: 18px;
+  color: #7dd3fc;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.game-home-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Combo popup ── */
+.combo-popup {
+  position: absolute;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fbbf24;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  animation: comboFloat 0.85s ease-out forwards;
+  z-index: 15;
+}
+
+@keyframes comboFloat {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(1.4);
+  }
+}
