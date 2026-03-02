@@ -119,8 +119,12 @@ export class PenguinGame {
 
   /* ── Resize ── */
   resize() {
-    this.w = this.wrapper.clientWidth
-    this.h = this.wrapper.clientHeight
+    const newW = this.wrapper.clientWidth
+    const newH = this.wrapper.clientHeight
+    // Ignore small height-only changes (mobile address bar show/hide)
+    if (this.running && newW === this.w && Math.abs(newH - this.h) < 100) return
+    this.w = newW
+    this.h = newH
     this.canvas.width  = this.w * devicePixelRatio
     this.canvas.height = this.h * devicePixelRatio
     this.canvas.style.width  = this.w + 'px'
