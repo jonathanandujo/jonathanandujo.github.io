@@ -132,7 +132,7 @@ export default function DolphinGameView({ syncAlias }) {
             Fish Catcher
           </h1>
           <p>
-            Help the dolphin catch falling fish! If 5 escape, it's game over!
+            Swim freely and catch falling fish! Use mouse, touch, or arrow keys (WASD) to move. If 5 escape, it's game over!
           </p>
           <button className="game-btn" onClick={startGame}>
             Dive In!

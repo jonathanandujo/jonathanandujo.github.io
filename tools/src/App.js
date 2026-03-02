@@ -19,7 +19,7 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
+      <div className="app-shell">
         <header className={`App-header ${menuCollapsed ? 'collapsed' : ''}`}>
           <button
             className="menu-toggle"

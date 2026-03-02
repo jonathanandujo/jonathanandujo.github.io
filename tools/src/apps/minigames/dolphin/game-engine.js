@@ -35,14 +35,14 @@ export class DolphinGame {
     this.dolphin = null
     this.fishes = []; this.particles = []; this.bubbles = []
     this.lastSpawn = 0; this.animFrame = null
-    this.inputX = null; this.touchId = null; this.keys = {}
+    this.inputX = null; this.inputY = null; this.touchId = null; this.keys = {}
     this.audioCtx = null
     this.time = 0
 
     // Bind handlers
     this._resize       = () => this.resize()
-    this._mouseMove    = (e) => this._pointerMove(e.clientX)
-    this._mouseLeave   = () => { this.inputX = null }
+    this._mouseMove    = (e) => this._pointerMove(e.clientX, e.clientY)
+    this._mouseLeave   = () => { this.inputX = null; this.inputY = null }
     this._touchStart   = (e) => this._handleTouchStart(e)
     this._touchMove    = (e) => this._handleTouchMove(e)
     this._touchEnd     = (e) => this._handleTouchEnd(e)
@@ -101,10 +101,11 @@ export class DolphinGame {
     document.removeEventListener('touchmove', this._preventScroll)
   }
 
-  _pointerMove(clientX) {
+  _pointerMove(clientX, clientY) {
     if (!this.running) return
     const rect = this.canvas.getBoundingClientRect()
     this.inputX = clientX - rect.left
+    this.inputY = clientY - rect.top
   }
 
   _handleTouchStart(e) {
@@ -112,13 +113,13 @@ export class DolphinGame {
     this._initAudio()
     const t = e.changedTouches[0]
     this.touchId = t.identifier
-    this._pointerMove(t.clientX)
+    this._pointerMove(t.clientX, t.clientY)
   }
 
   _handleTouchMove(e) {
     e.preventDefault()
     for (const t of e.changedTouches) {
-      if (t.identifier === this.touchId) this._pointerMove(t.clientX)
+      if (t.identifier === this.touchId) this._pointerMove(t.clientX, t.clientY)
     }
   }
 
@@ -145,8 +146,9 @@ export class DolphinGame {
     if (this.dolphin) {
       this.dolphin.w = this.w * this.DOLPHIN_RATIO
       this.dolphin.h = this.dolphin.w * 0.55
-      this.dolphin.y = this.h - this.dolphin.h - 16
+      // Keep dolphin in bounds
       this.dolphin.x = Math.min(Math.max(this.dolphin.x, 0), this.w - this.dolphin.w)
+      this.dolphin.y = Math.min(Math.max(this.dolphin.y, 0), this.h - this.dolphin.h)
     }
     this._buildBubbles()
   }
@@ -178,7 +180,7 @@ export class DolphinGame {
       w: this.w * this.DOLPHIN_RATIO,
       h: this.w * this.DOLPHIN_RATIO * 0.55
     }
-    this.dolphin.y = this.h - this.dolphin.h - 16
+    this.dolphin.y = this.h * 0.65
 
     this.running = true
     this.animFrame = requestAnimationFrame((t) => this._loop(t))
@@ -202,15 +204,20 @@ export class DolphinGame {
   _update(time) {
     const w = this.w, h = this.h, d = this.dolphin
 
-    // Dolphin movement
+    // Dolphin movement – free 2D swimming
     const moveSpeed = 7 * this.scale
-    if (this.inputX !== null) {
-      const target = this.inputX - d.w / 2
-      d.x += (target - d.x) * 0.22
+    if (this.inputX !== null && this.inputY !== null) {
+      const targetX = this.inputX - d.w / 2
+      const targetY = this.inputY - d.h / 2
+      d.x += (targetX - d.x) * 0.22
+      d.y += (targetY - d.y) * 0.18
     }
-    if (this.keys['ArrowLeft'] || this.keys['a']) d.x -= moveSpeed
+    if (this.keys['ArrowLeft']  || this.keys['a']) d.x -= moveSpeed
     if (this.keys['ArrowRight'] || this.keys['d']) d.x += moveSpeed
+    if (this.keys['ArrowUp']    || this.keys['w']) d.y -= moveSpeed
+    if (this.keys['ArrowDown']  || this.keys['s']) d.y += moveSpeed
     d.x = Math.max(0, Math.min(w - d.w, d.x))
+    d.y = Math.max(0, Math.min(h - d.h, d.y))
 
     // Spawn fish
     const interval = Math.max(this.MIN_SPAWN, this.SPAWN_INTERVAL - this.score * 8)
@@ -224,7 +231,18 @@ export class DolphinGame {
       const f = this.fishes[i]
       f.y += f.speed
       f.swimPhase += f.swimSpeed
-      f.x += Math.sin(f.swimPhase) * f.swimAmplitude
+
+      // Horizontal swimming with bounce off walls
+      f.x += f.vx + Math.sin(f.swimPhase) * f.swimAmplitude
+      if (f.x <= 0) {
+        f.x = 0
+        f.vx = Math.abs(f.vx)
+        f.facingRight = true
+      } else if (f.x + f.w >= w) {
+        f.x = w - f.w
+        f.vx = -Math.abs(f.vx)
+        f.facingRight = false
+      }
 
       const cx = f.x + f.w / 2
       const cy = f.y + f.h / 2
@@ -299,6 +317,7 @@ export class DolphinGame {
       y: -h,
       w, h,
       speed: (this.BASE_SPEED + this.score * this.SPEED_RAMP) * this.scale * (0.8 + Math.random() * 0.4),
+      vx: (Math.random() - 0.5) * 2.5 * this.scale,   // horizontal swim velocity
       swimPhase: Math.random() * Math.PI * 2,
       swimSpeed: Math.random() * 0.04 + 0.02,
       swimAmplitude: Math.random() * 1.2 + 0.4,
