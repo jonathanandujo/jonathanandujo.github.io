@@ -1,7 +1,9 @@
 .App {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   width: 100%;
+  overflow: hidden;
 }
 
 .App-header {
@@ -102,4 +104,34 @@ nav ul li a.active {
 main {
   flex: 1;
   min-width: 0;
+  overflow: auto;
+  height: 100%;
+}
+
+/* Tooltip for collapsed nav items */
+nav ul li a {
+  position: relative;
+}
+
+nav ul li a .nav-icon {
+  position: relative;
+}
+
+.App-header.collapsed nav ul li a:hover::after,
+.App-header.collapsed nav ul li a:focus::after {
+  content: attr(title);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 8px;
+  padding: 4px 10px;
+  background: #1f2937;
+  color: #fff;
+  font-size: 13px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }

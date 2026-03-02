@@ -14,7 +14,7 @@ import { getSyncAlias } from './supabase/supabaseClient';
 import './App.css';
 
 function App() {
-  const [menuCollapsed, setMenuCollapsed] = useState(false);
+  const [menuCollapsed, setMenuCollapsed] = useState(() => window.innerWidth < 768);
   const [syncAlias, setSyncAlias] = useState(getSyncAlias());
 
   return (

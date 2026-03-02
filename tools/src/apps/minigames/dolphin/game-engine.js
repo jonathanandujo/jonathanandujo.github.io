@@ -488,74 +488,91 @@ export class DolphinGame {
     ctx.save()
     ctx.translate(cx, cy + bob)
 
-    // Main body
-    ctx.fillStyle = '#5b86a8'
+    // ── Sleek body (elongated, tapered at both ends) ──
+    ctx.fillStyle = '#4a8db7'
     ctx.beginPath()
-    ctx.ellipse(0, 0, dw * 0.5, dh * 0.45, 0, 0, Math.PI * 2)
-    ctx.fill()
-
-    // Belly (lighter)
-    ctx.fillStyle = '#c8dce8'
-    ctx.beginPath()
-    ctx.ellipse(0, dh * 0.12, dw * 0.38, dh * 0.28, 0, 0, Math.PI * 2)
-    ctx.fill()
-
-    // Snout
-    ctx.fillStyle = '#5b86a8'
-    ctx.beginPath()
-    ctx.ellipse(dw * 0.42, -dh * 0.05, dw * 0.16, dh * 0.18, 0.15, 0, Math.PI * 2)
-    ctx.fill()
-
-    // Snout underside
-    ctx.fillStyle = '#c8dce8'
-    ctx.beginPath()
-    ctx.ellipse(dw * 0.42, dh * 0.02, dw * 0.12, dh * 0.08, 0.15, 0, Math.PI * 2)
-    ctx.fill()
-
-    // Dorsal fin
-    ctx.fillStyle = '#4a7494'
-    ctx.beginPath()
-    ctx.moveTo(-dw * 0.02, -dh * 0.4)
-    ctx.quadraticCurveTo(dw * 0.08, -dh * 0.75, dw * 0.18, -dh * 0.4)
+    // Start from tail, draw top curve to snout, then bottom curve back
+    ctx.moveTo(-dw * 0.48, 0)
+    // Top line: tail → back hump → head → snout tip
+    ctx.bezierCurveTo(-dw * 0.35, -dh * 0.38, -dw * 0.1, -dh * 0.42, dw * 0.12, -dh * 0.3)
+    ctx.bezierCurveTo(dw * 0.28, -dh * 0.22, dw * 0.42, -dh * 0.15, dw * 0.55, -dh * 0.08)
+    // Snout tip
+    ctx.bezierCurveTo(dw * 0.58, -dh * 0.04, dw * 0.58, dh * 0.06, dw * 0.54, dh * 0.1)
+    // Bottom line: snout → belly → tail
+    ctx.bezierCurveTo(dw * 0.4, dh * 0.2, dw * 0.2, dh * 0.35, dw * 0.0, dh * 0.32)
+    ctx.bezierCurveTo(-dw * 0.2, dh * 0.28, -dw * 0.38, dh * 0.18, -dw * 0.48, 0)
     ctx.closePath()
     ctx.fill()
 
-    // Tail fluke
-    ctx.fillStyle = '#4a7494'
+    // ── Belly (lighter underside) ──
+    ctx.fillStyle = '#c8dfe8'
     ctx.beginPath()
-    ctx.moveTo(-dw * 0.44, 0)
-    ctx.quadraticCurveTo(-dw * 0.58, -dh * 0.45, -dw * 0.5, -dh * 0.5)
-    ctx.quadraticCurveTo(-dw * 0.48, -dh * 0.15, -dw * 0.44, 0)
-    ctx.fill()
-    ctx.beginPath()
-    ctx.moveTo(-dw * 0.44, 0)
-    ctx.quadraticCurveTo(-dw * 0.58, dh * 0.45, -dw * 0.5, dh * 0.5)
-    ctx.quadraticCurveTo(-dw * 0.48, dh * 0.15, -dw * 0.44, 0)
+    ctx.moveTo(dw * 0.54, dh * 0.1)
+    ctx.bezierCurveTo(dw * 0.4, dh * 0.2, dw * 0.2, dh * 0.32, dw * 0.0, dh * 0.28)
+    ctx.bezierCurveTo(-dw * 0.18, dh * 0.24, -dw * 0.32, dh * 0.14, -dw * 0.4, 0)
+    ctx.bezierCurveTo(-dw * 0.28, dh * 0.05, -dw * 0.05, dh * 0.12, dw * 0.15, dh * 0.08)
+    ctx.bezierCurveTo(dw * 0.32, dh * 0.04, dw * 0.48, dh * 0.04, dw * 0.54, dh * 0.1)
+    ctx.closePath()
     ctx.fill()
 
-    // Side fin (pectoral)
-    ctx.fillStyle = '#4a7494'
+    // ── Dorsal fin (tall, curved back like a real dolphin) ──
+    ctx.fillStyle = '#3d7a9e'
     ctx.beginPath()
-    ctx.moveTo(dw * 0.05, dh * 0.2)
-    ctx.quadraticCurveTo(dw * 0.15, dh * 0.55, dw * 0.0, dh * 0.45)
-    ctx.quadraticCurveTo(-dw * 0.02, dh * 0.3, dw * 0.05, dh * 0.2)
+    ctx.moveTo(-dw * 0.04, -dh * 0.38)
+    ctx.bezierCurveTo(-dw * 0.02, -dh * 0.85, dw * 0.12, -dh * 0.75, dw * 0.14, -dh * 0.38)
+    ctx.closePath()
     ctx.fill()
 
-    // Eye
+    // ── Tail fluke (horizontal, two-lobed like a real dolphin) ──
+    ctx.fillStyle = '#3d7a9e'
+    // Upper lobe
+    ctx.beginPath()
+    ctx.moveTo(-dw * 0.47, 0)
+    ctx.bezierCurveTo(-dw * 0.52, -dh * 0.08, -dw * 0.62, -dh * 0.35, -dw * 0.56, -dh * 0.42)
+    ctx.bezierCurveTo(-dw * 0.52, -dh * 0.3, -dw * 0.48, -dh * 0.12, -dw * 0.47, 0)
+    ctx.fill()
+    // Lower lobe
+    ctx.beginPath()
+    ctx.moveTo(-dw * 0.47, 0)
+    ctx.bezierCurveTo(-dw * 0.52, dh * 0.08, -dw * 0.62, dh * 0.35, -dw * 0.56, dh * 0.42)
+    ctx.bezierCurveTo(-dw * 0.52, dh * 0.3, -dw * 0.48, dh * 0.12, -dw * 0.47, 0)
+    ctx.fill()
+
+    // ── Pectoral fin (side flipper) ──
+    ctx.fillStyle = '#3d7a9e'
+    ctx.beginPath()
+    ctx.moveTo(dw * 0.08, dh * 0.1)
+    ctx.bezierCurveTo(dw * 0.06, dh * 0.28, dw * 0.0, dh * 0.45, -dw * 0.06, dh * 0.4)
+    ctx.bezierCurveTo(-dw * 0.04, dh * 0.3, dw * 0.02, dh * 0.18, dw * 0.08, dh * 0.1)
+    ctx.fill()
+
+    // ── Melon (forehead bump) ──
+    ctx.fillStyle = '#4a8db7'
+    ctx.beginPath()
+    ctx.ellipse(dw * 0.3, -dh * 0.2, dw * 0.1, dh * 0.12, -0.3, 0, Math.PI * 2)
+    ctx.fill()
+
+    // ── Eye ──
     ctx.fillStyle = '#fff'
     ctx.beginPath()
-    ctx.arc(dw * 0.28, -dh * 0.1, dw * 0.045, 0, Math.PI * 2)
+    ctx.ellipse(dw * 0.3, -dh * 0.12, dw * 0.035, dh * 0.06, 0, 0, Math.PI * 2)
     ctx.fill()
     ctx.fillStyle = '#1a1a2e'
     ctx.beginPath()
-    ctx.arc(dw * 0.29, -dh * 0.09, dw * 0.025, 0, Math.PI * 2)
+    ctx.arc(dw * 0.31, -dh * 0.11, dw * 0.018, 0, Math.PI * 2)
+    ctx.fill()
+    // Eye glint
+    ctx.fillStyle = '#fff'
+    ctx.beginPath()
+    ctx.arc(dw * 0.305, -dh * 0.13, dw * 0.007, 0, Math.PI * 2)
     ctx.fill()
 
-    // Mouth (smile line)
-    ctx.strokeStyle = '#3a6080'
-    ctx.lineWidth = 1.5
+    // ── Mouth line (long beak smile) ──
+    ctx.strokeStyle = '#2d6a88'
+    ctx.lineWidth = 1.2
     ctx.beginPath()
-    ctx.arc(dw * 0.4, dh * 0.05, dw * 0.12, -0.3, 0.6)
+    ctx.moveTo(dw * 0.35, -dh * 0.02)
+    ctx.bezierCurveTo(dw * 0.42, 0, dw * 0.5, dh * 0.02, dw * 0.55, dh * 0.01)
     ctx.stroke()
 
     ctx.restore()

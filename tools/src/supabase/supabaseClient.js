@@ -15,7 +15,20 @@ export function getSupabaseClient() {
 }
 
 export function getSyncAlias() {
-  return (localStorage.getItem(SYNC_ALIAS_KEY) || '').trim();
+  let alias = (localStorage.getItem(SYNC_ALIAS_KEY) || '').trim();
+  if (!alias) {
+    alias = _generateAlias();
+    localStorage.setItem(SYNC_ALIAS_KEY, alias);
+  }
+  return alias;
+}
+
+function _generateAlias() {
+  const adj = ['swift','brave','calm','keen','bold','cool','warm','fast','wise','free'];
+  const animals = ['dolphin','falcon','otter','tiger','panda','eagle','fox','wolf','hawk','bear'];
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  const num = Math.floor(Math.random() * 9000) + 1000;
+  return `${pick(adj)}-${pick(animals)}-${num}`;
 }
 
 export function setSyncAlias(alias) {
