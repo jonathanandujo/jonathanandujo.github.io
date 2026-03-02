@@ -33,8 +33,8 @@ export class DolphinGame {
     this.running = false
     this.score = 0; this.misses = 0; this.combo = 0
     this.dolphin = null
-    this.fishes = []; this.particles = []; this.bubbles = []
-    this.lastSpawn = 0; this.animFrame = null
+    this.fishes = []; this.particles = []; this.bubbles = []; this.powerUps = []
+    this.lastSpawn = 0; this.lastLifeDrop = 0; this.animFrame = null
     this.inputX = null; this.inputY = null; this.touchId = null; this.keys = {}
     this.audioCtx = null
     this.time = 0
@@ -75,6 +75,7 @@ export class DolphinGame {
   _sfxMiss()     { this._tone(180,0.3,'triangle',0.12) }
   _sfxCombo()    { this._tone(1100,0.12,'sine',0.16); setTimeout(()=>this._tone(1400,0.1,'sine',0.12),70) }
   _sfxGameOver() { this._tone(280,0.35,'sawtooth',0.1); setTimeout(()=>this._tone(180,0.4,'sawtooth',0.08),220) }
+  _sfxLife()     { this._tone(523,0.1,'sine',0.15); setTimeout(()=>this._tone(659,0.1,'sine',0.13),80); setTimeout(()=>this._tone(784,0.15,'sine',0.12),160) }
 
   /* ── Events ── */
   _addListeners() {
@@ -172,7 +173,7 @@ export class DolphinGame {
   start() {
     this._initAudio()
     this.score = 0; this.misses = 0; this.combo = 0
-    this.fishes = []; this.particles = []; this.lastSpawn = 0
+    this.fishes = []; this.particles = []; this.powerUps = []; this.lastSpawn = 0; this.lastLifeDrop = 0
 
     this.dolphin = {
       x: this.w / 2 - (this.w * this.DOLPHIN_RATIO) / 2,
@@ -203,6 +204,7 @@ export class DolphinGame {
 
   _update(time) {
     const w = this.w, h = this.h, d = this.dolphin
+    const prevX = d.x, prevY = d.y
 
     // Dolphin movement – free 2D swimming
     const moveSpeed = 7 * this.scale
@@ -218,6 +220,11 @@ export class DolphinGame {
     if (this.keys['ArrowDown']  || this.keys['s']) d.y += moveSpeed
     d.x = Math.max(0, Math.min(w - d.w, d.x))
     d.y = Math.max(0, Math.min(h - d.h, d.y))
+
+    // Track velocity for animation
+    d.vx = d.x - prevX
+    d.vy = d.y - prevY
+    d.speed = Math.sqrt(d.vx * d.vx + d.vy * d.vy)
 
     // Spawn fish
     const interval = Math.max(this.MIN_SPAWN, this.SPAWN_INTERVAL - this.score * 8)
@@ -298,6 +305,40 @@ export class DolphinGame {
         b.x = Math.random() * this.w
       }
     }
+
+    // Spawn life power-up occasionally (every ~14s, only if player has misses)
+    const lifeInterval = 14000 + Math.random() * 4000
+    if (this.misses > 0 && (!this.lastLifeDrop || time - this.lastLifeDrop > lifeInterval)) {
+      this._spawnLifePowerUp()
+      this.lastLifeDrop = time
+    }
+
+    // Update power-ups
+    for (let i = this.powerUps.length - 1; i >= 0; i--) {
+      const pu = this.powerUps[i]
+      pu.y += pu.speed
+      pu.phase += 0.05
+
+      const pcx = pu.x + pu.size / 2
+      const pcy = pu.y + pu.size / 2
+
+      // Collision with dolphin
+      if (pcx > d.x && pcx < d.x + d.w && pcy > d.y && pcy < d.y + d.h) {
+        if (this.misses > 0) {
+          this.misses--
+          this._sfxLife()
+          this._spawnLifeParticles(pcx, pcy)
+          if (this.cb.onMiss) this.cb.onMiss(this.misses)
+        }
+        this.powerUps.splice(i, 1)
+        continue
+      }
+
+      // Off screen
+      if (pu.y > h + pu.size) {
+        this.powerUps.splice(i, 1)
+      }
+    }
   }
 
   _gameOver() {
@@ -323,6 +364,17 @@ export class DolphinGame {
       swimAmplitude: Math.random() * 1.2 + 0.4,
       facingRight: Math.random() > 0.5,
       colors
+    })
+  }
+
+  _spawnLifePowerUp() {
+    const size = 22 * this.scale
+    this.powerUps.push({
+      x: Math.random() * (this.w - size),
+      y: -size,
+      size,
+      speed: 1.2 * this.scale,
+      phase: Math.random() * Math.PI * 2
     })
   }
 
@@ -369,6 +421,21 @@ export class DolphinGame {
     }
   }
 
+  _spawnLifeParticles(x, y) {
+    for (let i = 0; i < 10; i++) {
+      const angle = Math.random() * Math.PI * 2
+      const speed = Math.random() * 3 + 1
+      this.particles.push({
+        x, y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 1.5,
+        life: 1, decay: Math.random() * 0.025 + 0.015,
+        size: Math.random() * 4 + 2,
+        color: Math.random() > 0.5 ? '#ff6b9d' : '#ff3366'
+      })
+    }
+  }
+
   /* ── Drawing ── */
   _draw(time) {
     const ctx = this.ctx
@@ -376,9 +443,44 @@ export class DolphinGame {
     this._drawOceanBg(time)
     this._drawBubbles()
     this._drawSeaFloor()
+    for (const pu of this.powerUps) this._drawLifePowerUp(pu, time)
     for (const f of this.fishes) this._drawFish(f)
     this._drawDolphin(this.dolphin, time)
     this._drawParticles()
+  }
+
+  _drawLifePowerUp(pu, time) {
+    const ctx = this.ctx
+    const cx = pu.x + pu.size / 2
+    const cy = pu.y + pu.size / 2
+    const s = pu.size * (0.9 + Math.sin(pu.phase) * 0.1)  // pulsing
+
+    ctx.save()
+    ctx.translate(cx, cy)
+
+    // Glow
+    ctx.shadowColor = '#ff3366'
+    ctx.shadowBlur = 12 + Math.sin(pu.phase) * 4
+
+    // Heart shape
+    const hs = s * 0.5
+    ctx.fillStyle = '#ff3366'
+    ctx.beginPath()
+    ctx.moveTo(0, hs * 0.35)
+    ctx.bezierCurveTo(-hs * 0.05, hs * 0.1, -hs * 0.55, -hs * 0.2, -hs * 0.55, -hs * 0.55)
+    ctx.bezierCurveTo(-hs * 0.55, -hs * 0.95, 0, -hs * 0.85, 0, -hs * 0.35)
+    ctx.bezierCurveTo(0, -hs * 0.85, hs * 0.55, -hs * 0.95, hs * 0.55, -hs * 0.55)
+    ctx.bezierCurveTo(hs * 0.55, -hs * 0.2, hs * 0.05, hs * 0.1, 0, hs * 0.35)
+    ctx.fill()
+
+    // Highlight
+    ctx.fillStyle = 'rgba(255,255,255,0.35)'
+    ctx.beginPath()
+    ctx.ellipse(-hs * 0.2, -hs * 0.4, hs * 0.15, hs * 0.2, -0.3, 0, Math.PI * 2)
+    ctx.fill()
+
+    ctx.shadowBlur = 0
+    ctx.restore()
   }
 
   _drawOceanBg(time) {
@@ -508,6 +610,13 @@ export class DolphinGame {
     // Gentle bob animation
     const bob = Math.sin(time * 0.003) * 3
 
+    // Movement-reactive animation
+    const spd = d.speed || 0
+    const tailFreq = 0.008 + spd * 0.003    // faster tail when moving
+    const tailAmp  = 0.15 + Math.min(spd * 0.04, 0.35)  // wider sweep when moving
+    const tailSwing = Math.sin(time * tailFreq) * tailAmp
+    const pectAngle = Math.min(spd * 0.02, 0.25)  // pectoral sweeps back when fast
+
     ctx.save()
     ctx.translate(cx, cy + bob)
 
@@ -538,36 +647,48 @@ export class DolphinGame {
     ctx.closePath()
     ctx.fill()
 
-    // ── Dorsal fin (tall, curved back like a real dolphin) ──
+    // ── Dorsal fin (sways slightly with movement) ──
     ctx.fillStyle = '#3d7a9e'
+    ctx.save()
+    ctx.translate(dw * 0.05, -dh * 0.38)
+    ctx.rotate(tailSwing * 0.3)  // subtle lean
     ctx.beginPath()
-    ctx.moveTo(-dw * 0.04, -dh * 0.38)
-    ctx.bezierCurveTo(-dw * 0.02, -dh * 0.85, dw * 0.12, -dh * 0.75, dw * 0.14, -dh * 0.38)
+    ctx.moveTo(-dw * 0.09, 0)
+    ctx.bezierCurveTo(-dw * 0.07, -dh * 0.47, dw * 0.07, -dh * 0.37, dw * 0.09, 0)
     ctx.closePath()
     ctx.fill()
+    ctx.restore()
 
-    // ── Tail fluke (horizontal, two-lobed like a real dolphin) ──
+    // ── Tail fluke (animated swing based on movement) ──
     ctx.fillStyle = '#3d7a9e'
+    ctx.save()
+    ctx.translate(-dw * 0.47, 0)
+    ctx.rotate(tailSwing)  // swing the tail!
     // Upper lobe
     ctx.beginPath()
-    ctx.moveTo(-dw * 0.47, 0)
-    ctx.bezierCurveTo(-dw * 0.52, -dh * 0.08, -dw * 0.62, -dh * 0.35, -dw * 0.56, -dh * 0.42)
-    ctx.bezierCurveTo(-dw * 0.52, -dh * 0.3, -dw * 0.48, -dh * 0.12, -dw * 0.47, 0)
+    ctx.moveTo(0, 0)
+    ctx.bezierCurveTo(-dw * 0.05, -dh * 0.08, -dw * 0.15, -dh * 0.35, -dw * 0.09, -dh * 0.42)
+    ctx.bezierCurveTo(-dw * 0.05, -dh * 0.3, -dw * 0.01, -dh * 0.12, 0, 0)
     ctx.fill()
     // Lower lobe
     ctx.beginPath()
-    ctx.moveTo(-dw * 0.47, 0)
-    ctx.bezierCurveTo(-dw * 0.52, dh * 0.08, -dw * 0.62, dh * 0.35, -dw * 0.56, dh * 0.42)
-    ctx.bezierCurveTo(-dw * 0.52, dh * 0.3, -dw * 0.48, dh * 0.12, -dw * 0.47, 0)
+    ctx.moveTo(0, 0)
+    ctx.bezierCurveTo(-dw * 0.05, dh * 0.08, -dw * 0.15, dh * 0.35, -dw * 0.09, dh * 0.42)
+    ctx.bezierCurveTo(-dw * 0.05, dh * 0.3, -dw * 0.01, dh * 0.12, 0, 0)
     ctx.fill()
+    ctx.restore()
 
-    // ── Pectoral fin (side flipper) ──
+    // ── Pectoral fin (sweeps back when swimming fast) ──
     ctx.fillStyle = '#3d7a9e'
+    ctx.save()
+    ctx.translate(dw * 0.08, dh * 0.1)
+    ctx.rotate(pectAngle + Math.sin(time * 0.006) * 0.08)
     ctx.beginPath()
-    ctx.moveTo(dw * 0.08, dh * 0.1)
-    ctx.bezierCurveTo(dw * 0.06, dh * 0.28, dw * 0.0, dh * 0.45, -dw * 0.06, dh * 0.4)
-    ctx.bezierCurveTo(-dw * 0.04, dh * 0.3, dw * 0.02, dh * 0.18, dw * 0.08, dh * 0.1)
+    ctx.moveTo(0, 0)
+    ctx.bezierCurveTo(-dw * 0.02, dh * 0.18, -dw * 0.08, dh * 0.35, -dw * 0.14, dh * 0.3)
+    ctx.bezierCurveTo(-dw * 0.12, dh * 0.2, -dw * 0.06, dh * 0.08, 0, 0)
     ctx.fill()
+    ctx.restore()
 
     // ── Melon (forehead bump) ──
     ctx.fillStyle = '#4a8db7'
