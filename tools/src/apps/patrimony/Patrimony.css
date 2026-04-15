@@ -391,6 +391,47 @@
   transform: translateY(0);
 }
 
+/* ── Confirm Modal ────────────────────────────────── */
+.confirm-modal {
+  max-width: 380px;
+  text-align: center;
+}
+
+.confirm-modal h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.confirm-message {
+  font-size: 14px;
+  color: #4b5563;
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.confirm-modal .modal-actions {
+  justify-content: center;
+}
+
+.confirm-modal .btn-danger {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(239,68,68,.35);
+  transition: background .2s, box-shadow .2s, transform .1s;
+}
+
+.confirm-modal .btn-danger:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  box-shadow: 0 4px 12px rgba(239,68,68,.45);
+  transform: translateY(-1px);
+}
+
 /* ── Donut chart ──────────────────────────────────── */
 .donut-wrapper {
   display: flex;

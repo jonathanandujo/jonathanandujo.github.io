@@ -34,8 +34,8 @@ const ItemModal = ({ category, item, onSave, onCancel }) => {
   };
 
   return (
-    <div className="modal-overlay" onClick={onCancel}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal">
         <h3>{item ? 'Edit' : 'Add'} {category.label.replace(/s$/, '')}</h3>
         <form onSubmit={handleSubmit}>
           {category.fields.map((f) => (

@@ -55,8 +55,8 @@ const CategoryModal = ({ category, onSave, onCancel }) => {
   };
 
   return (
-    <div className="modal-overlay" onClick={onCancel}>
-      <div className="modal category-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal category-modal">
         <h3>{category ? 'Edit Category' : 'New Category'}</h3>
         <form onSubmit={handleSubmit}>
           <div className="field">

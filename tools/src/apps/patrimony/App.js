@@ -4,6 +4,7 @@ import DonutChart from './components/DonutChart';
 import CategorySection from './components/CategorySection';
 import ItemModal from './components/ItemModal';
 import CategoryModal from './components/CategoryModal';
+import ConfirmModal from './components/ConfirmModal';
 import { CATEGORIES, DEFAULT_DATA, STORAGE_KEY } from './dataModel';
 import { useSupabaseSync } from '../../supabase/useSupabaseSync';
 import '../../supabase/SyncPanel.css';
@@ -19,6 +20,7 @@ const Patrimony = ({ syncAlias }) => {
   });
   const [modalState, setModalState] = useState(null); // { categoryKey, index? }
   const [catModalState, setCatModalState] = useState(null); // null | { category? } for add/edit
+  const [confirmState, setConfirmState] = useState(null); // { title, message, onConfirm }
   const [allCollapsed, setAllCollapsed] = useState(false);
   const fileInputRef = useRef();
   const { push, pull, syncing, lastSync, error: syncError, isConfigured } = useSupabaseSync('patrimony', syncAlias);
@@ -63,13 +65,20 @@ const Patrimony = ({ syncAlias }) => {
   };
 
   const handleDelete = (categoryKey, index) => {
-    if (!window.confirm('Delete this item?')) return;
-    setData((prev) => {
-      const updated = { ...prev };
-      const list = [...(updated[categoryKey] || [])];
-      list.splice(index, 1);
-      updated[categoryKey] = list;
-      return updated;
+    const itemName = (data[categoryKey] || [])[index]?.name || 'this item';
+    setConfirmState({
+      title: 'Delete Item',
+      message: `Are you sure you want to delete "${itemName}"?`,
+      onConfirm: () => {
+        setData((prev) => {
+          const updated = { ...prev };
+          const list = [...(updated[categoryKey] || [])];
+          list.splice(index, 1);
+          updated[categoryKey] = list;
+          return updated;
+        });
+        setConfirmState(null);
+      },
     });
   };
 
@@ -104,8 +113,14 @@ const Patrimony = ({ syncAlias }) => {
 
   // ── Clear all data ──────────────────────────────
   const handleClear = () => {
-    if (!window.confirm('Clear ALL patrimony data? This cannot be undone.')) return;
-    setData({ ...DEFAULT_DATA });
+    setConfirmState({
+      title: 'Clear All Data',
+      message: 'Clear ALL patrimony data? This cannot be undone.',
+      onConfirm: () => {
+        setData({ ...DEFAULT_DATA });
+        setConfirmState(null);
+      },
+    });
   };
 
   // ── Custom Category CRUD ─────────────────────────
@@ -129,12 +144,18 @@ const Patrimony = ({ syncAlias }) => {
   const handleDeleteCategory = (key) => {
     const cat = (data._customCategories || []).find((c) => c.key === key);
     if (!cat) return;
-    if (!window.confirm(`Delete category "${cat.label}" and all its items?`)) return;
-    setData((prev) => {
-      const updated = { ...prev };
-      updated._customCategories = (updated._customCategories || []).filter((c) => c.key !== key);
-      delete updated[key];
-      return updated;
+    setConfirmState({
+      title: 'Delete Category',
+      message: `Delete category "${cat.label}" and all its items?`,
+      onConfirm: () => {
+        setData((prev) => {
+          const updated = { ...prev };
+          updated._customCategories = (updated._customCategories || []).filter((c) => c.key !== key);
+          delete updated[key];
+          return updated;
+        });
+        setConfirmState(null);
+      },
     });
   };
 
@@ -230,6 +251,15 @@ const Patrimony = ({ syncAlias }) => {
           category={catModalState.category || null}
           onSave={handleSaveCategory}
           onCancel={() => setCatModalState(null)}
+        />
+      )}
+
+      {confirmState && (
+        <ConfirmModal
+          title={confirmState.title}
+          message={confirmState.message}
+          onConfirm={confirmState.onConfirm}
+          onCancel={() => setConfirmState(null)}
         />
       )}
     </div>
