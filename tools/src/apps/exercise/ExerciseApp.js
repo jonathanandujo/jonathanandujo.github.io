@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import RoutineBuilder from './RoutineBuilder';
 import TodayView from './TodayView';
+import ProgressView from './ProgressView';
 import useExerciseStore from './useExerciseStore';
 import { useSupabaseSync } from '../../supabase/useSupabaseSync';
 import '../../supabase/SyncPanel.css';
 import './ExerciseApp.css';
 
-const TABS = ['Today', 'Routine'];
+const TABS = ['Today', 'Routine', 'Progress'];
 
 export default function ExerciseApp({ syncAlias }) {
   const [tab, setTab] = useState('Today');
@@ -25,6 +26,7 @@ export default function ExerciseApp({ syncAlias }) {
             >
               {t === 'Today' && '📅 '}
               {t === 'Routine' && '🗓️ '}
+              {t === 'Progress' && '📊 '}
               {t}
             </button>
           ))}
@@ -65,6 +67,13 @@ export default function ExerciseApp({ syncAlias }) {
             addExerciseToDay={store.addExerciseToDay}
             removeExerciseFromDay={store.removeExerciseFromDay}
             DAY_NAMES={store.DAY_NAMES}
+          />
+        )}
+        {tab === 'Progress' && (
+          <ProgressView
+            schedule={store.schedule}
+            activeDays={store.activeDays}
+            completions={store.completions}
           />
         )}
       </div>
