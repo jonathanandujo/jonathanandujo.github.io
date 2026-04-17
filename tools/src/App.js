@@ -8,6 +8,7 @@ import Patrimony from './apps/patrimony/App';
 import MinigamesHub from './apps/minigames/MinigamesHub';
 import PenguinGame from './apps/minigames/penguin/PenguinGame';
 import DolphinGame from './apps/minigames/dolphin/DolphinGame';
+import ExerciseApp from './apps/exercise/ExerciseApp';
 import SyncPanel from './supabase/SyncPanel';
 import { getSyncAlias } from './supabase/supabaseClient';
 // import Minesweeper from './apps/minesweeper/Minesweeper';
@@ -35,6 +36,7 @@ function App() {
               <li><NavLink to="/matrix" title="Eisenhower Matrix"><span className="nav-icon">📋</span><span className="nav-label">Eisenhower Matrix</span></NavLink></li>
               <li><NavLink to="/patrimony" title="Patrimony"><span className="nav-icon">💰</span><span className="nav-label">Patrimony</span></NavLink></li>
               <li><NavLink to="/minigames" title="Minigames"><span className="nav-icon">🎮</span><span className="nav-label">Minigames</span></NavLink></li>
+              <li><NavLink to="/exercise" title="Exercise Routines"><span className="nav-icon">🏋️</span><span className="nav-label">Exercise Routines</span></NavLink></li>
               {/* <li><NavLink to="/minesweeper" title="Minesweeper"><span className="nav-icon">💣</span><span className="nav-label">Minesweeper</span></NavLink></li> */}
             </ul>
           </nav>
@@ -50,6 +52,7 @@ function App() {
             <Route path="/minigames" element={<MinigamesHub />} />
             <Route path="/minigames/penguin" element={<PenguinGame syncAlias={syncAlias} />} />
             <Route path="/minigames/dolphin" element={<DolphinGame syncAlias={syncAlias} />} />
+            <Route path="/exercise" element={<ExerciseApp syncAlias={syncAlias} />} />
             <Route path="/event/:id" element={<Event />} />
             {/* <Route path="/minesweeper" element={<Minesweeper />} /> */}
           </Routes>

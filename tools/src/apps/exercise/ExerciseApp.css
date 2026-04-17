@@ -1,0 +1,504 @@
+/* ── Exercise App ───────────────────────────────── */
+.exercise-app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #1f2937;
+}
+
+/* ── Top Bar (tabs + sync) ──────────────────────── */
+.exercise-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.exercise-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.exercise-tab {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #6b7280;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.exercise-tab:hover {
+  color: #374151;
+}
+
+.exercise-tab.active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+}
+
+/* ── Routine Builder ────────────────────────────── */
+.routine-builder h2 {
+  margin-top: 0;
+}
+
+.rb-subtitle {
+  margin: -8px 0 18px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* ── Day Toggle Bar ─────────────────────────────── */
+.day-toggle-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.day-toggle-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 60px;
+}
+
+.day-toggle-btn.on {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.day-toggle-btn.off {
+  opacity: 0.5;
+}
+
+.day-toggle-btn:hover {
+  border-color: #2563eb;
+  opacity: 1;
+}
+
+.dt-short {
+  font-weight: 700;
+  font-size: 14px;
+  color: #374151;
+}
+
+.dt-indicator {
+  font-size: 12px;
+}
+
+/* ── Schedule Columns ───────────────────────────── */
+.schedule-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.schedule-col {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+  transition: opacity 0.2s;
+}
+
+.schedule-col.inactive {
+  opacity: 0.35;
+}
+
+.col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  cursor: pointer;
+  user-select: none;
+}
+
+.schedule-col.active .col-header {
+  background: linear-gradient(135deg, #eff6ff, #e0f2fe);
+}
+
+.col-day-name {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.schedule-col.active .col-day-name {
+  color: #2563eb;
+}
+
+.col-badge {
+  background: #2563eb;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.col-rest {
+  font-size: 12px;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.col-body {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 50px;
+}
+
+/* ── Draggable Exercise in Schedule ─────────────── */
+.schedule-exercise {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: grab;
+  user-select: none;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.schedule-exercise:hover {
+  background: #e5e7eb;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.schedule-exercise:active {
+  cursor: grabbing;
+  opacity: 0.7;
+}
+
+.drag-handle {
+  color: #9ca3af;
+  font-size: 14px;
+  cursor: grab;
+}
+
+.se-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.se-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.se-name {
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.se-meta {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.remove-btn {
+  border: none;
+  background: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.remove-btn:hover {
+  background: #fef2f2;
+}
+
+/* ── Inline Add Button ──────────────────────────── */
+.inline-add-btn {
+  width: 100%;
+  padding: 8px;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  background: none;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.inline-add-btn:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+/* ── Inline Add Panel ───────────────────────────── */
+.inline-add-panel {
+  border: 2px solid #2563eb;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+  animation: iap-slide 0.2s ease;
+}
+
+@keyframes iap-slide {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.iap-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #eff6ff;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.iap-header span {
+  flex: 1;
+}
+
+.iap-close,
+.iap-back {
+  border: none;
+  background: none;
+  color: #6b7280;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.iap-close:hover,
+.iap-back:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.iap-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+}
+
+.iap-cat-btn {
+  padding: 6px 10px;
+  font-size: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+
+.iap-cat-btn:hover {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.iap-exercises {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px 8px 8px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.iap-ex-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  font-size: 13px;
+  transition: all 0.12s;
+}
+
+.iap-ex-btn:hover:not(:disabled) {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.iap-ex-btn.added {
+  background: #f0fdf4;
+  border-color: #86efac;
+  cursor: default;
+}
+
+.iap-ex-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.iap-ex-detail {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.iap-ex-check {
+  color: #22c55e;
+  font-weight: 700;
+}
+
+/* ── Today View ─────────────────────────────────── */
+.today-view h2 {
+  margin-top: 0;
+}
+
+.today-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+}
+
+.today-hint {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.today-progress {
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb, #10b981);
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ── Today Exercise Item ────────────────────────── */
+.today-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.today-exercise {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  background: #fff;
+}
+
+.today-exercise:hover {
+  border-color: #2563eb;
+  background: #f0f9ff;
+}
+
+.today-exercise.done {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.today-exercise.done .today-name,
+.today-exercise.done .today-desc {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+.today-check {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.today-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.today-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.today-desc {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.today-meta {
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* ── Responsive ─────────────────────────────────── */
+@media (max-width: 600px) {
+  .exercise-app {
+    padding: 12px;
+  }
+  .schedule-columns {
+    grid-template-columns: 1fr;
+  }
+  .day-toggle-bar {
+    gap: 4px;
+  }
+  .day-toggle-btn {
+    padding: 8px 10px;
+    min-width: 44px;
+  }
+  .exercise-tabs {
+    overflow-x: auto;
+  }
+  .exercise-top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
