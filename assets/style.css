@@ -312,6 +312,15 @@ a:hover {
     border: 1px solid var(--border-color);
 }
 
+.qrCodes .qr-label {
+    display: none;
+}
+
+.qrCodes a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
 /* ===== FOOTER ===== */
 .last-update {
     text-align: right;
@@ -438,7 +447,30 @@ b {
 
     .qrCodes {
         order: 4;
+        flex-direction: row;
+        justify-content: center;
+        gap: 16px;
+        margin-top: 15px;
+        padding-top: 10px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .qrCodes img {
         display: none;
+    }
+
+    .qrCodes .qr-label {
+        display: inline;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .qrCodes a {
+        padding: 6px 12px;
+        border: 1px solid var(--accent-color, #2563eb);
+        border-radius: 4px;
+        color: var(--accent-color, #2563eb);
+        font-size: 0.85rem;
     }
 
     /* Skills in 2 columns on mobile */
