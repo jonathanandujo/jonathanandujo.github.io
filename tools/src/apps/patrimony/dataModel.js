@@ -73,6 +73,7 @@ export const DEFAULT_DATA = {
   loans: [],
   otherDebts: [],
   _customCategories: [],
+  _history: [], // [{ date: 'YYYY-MM-DD', assets, liabilities, net }]
 };
 
 export const STORAGE_KEY = 'patrimonyData';

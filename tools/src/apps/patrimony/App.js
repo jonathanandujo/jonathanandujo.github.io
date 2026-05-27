@@ -5,10 +5,24 @@ import CategorySection from './components/CategorySection';
 import ItemModal from './components/ItemModal';
 import CategoryModal from './components/CategoryModal';
 import ConfirmModal from './components/ConfirmModal';
+import TrendChart from './components/TrendChart';
 import { CATEGORIES, DEFAULT_DATA, STORAGE_KEY } from './dataModel';
 import { useSupabaseSync } from '../../supabase/useSupabaseSync';
 import '../../supabase/SyncPanel.css';
 import './Patrimony.css';
+
+const AUTO_PUSH_DELAY_MS = 2000;
+const todayStr = () => new Date().toISOString().slice(0, 10);
+
+const computeTotals = (data, categories) => {
+  const assets = categories
+    .filter((c) => c.type === 'asset')
+    .reduce((sum, c) => sum + (data[c.key] || []).reduce((s, i) => s + Number(i.value || 0), 0), 0);
+  const liabilities = categories
+    .filter((c) => c.type === 'liability')
+    .reduce((sum, c) => sum + (data[c.key] || []).reduce((s, i) => s + Number(i.value || 0), 0), 0);
+  return { assets, liabilities, net: assets - liabilities };
+};
 
 const Patrimony = ({ syncAlias }) => {
   const [data, setData] = useState(() => {
@@ -22,8 +36,11 @@ const Patrimony = ({ syncAlias }) => {
   const [catModalState, setCatModalState] = useState(null); // null | { category? } for add/edit
   const [confirmState, setConfirmState] = useState(null); // { title, message, onConfirm }
   const [allCollapsed, setAllCollapsed] = useState(false);
+  const [showTrend, setShowTrend] = useState(false);
   const fileInputRef = useRef();
   const autoPulledRef = useRef(false);
+  const autoPushTimerRef = useRef(null);
+  const skipNextAutoPushRef = useRef(true); // skip the very first push (initial mount / after pull)
   const { push, pull, syncing, lastSync, error: syncError, isConfigured } = useSupabaseSync('patrimony', syncAlias);
 
   // ── Auto-pull latest version from server on load ─
@@ -32,8 +49,26 @@ const Patrimony = ({ syncAlias }) => {
     autoPulledRef.current = true;
     (async () => {
       const remote = await pull();
-      if (remote) setData({ ...DEFAULT_DATA, ...remote });
+      if (remote) {
+        skipNextAutoPushRef.current = true;
+        setData({ ...DEFAULT_DATA, ...remote });
+      }
     })();
+  }, [isConfigured, pull]);
+
+  // ── Re-pull when the tab regains focus (multi-device) ─
+  useEffect(() => {
+    if (!isConfigured) return;
+    const onVisible = async () => {
+      if (document.visibilityState !== 'visible') return;
+      const remote = await pull();
+      if (remote) {
+        skipNextAutoPushRef.current = true;
+        setData((prev) => ({ ...DEFAULT_DATA, ...remote, _history: remote._history || prev._history }));
+      }
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => document.removeEventListener('visibilitychange', onVisible);
   }, [isConfigured, pull]);
 
   // ── Merge built-in + custom categories (assets first, then liabilities) ─
@@ -49,6 +84,45 @@ const Patrimony = ({ syncAlias }) => {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }, [data]);
+
+  // ── Daily snapshot of totals into _history ───────
+  useEffect(() => {
+    const totals = computeTotals(data, allCategories);
+    const today = todayStr();
+    const history = data._history || [];
+    const last = history[history.length - 1];
+    const sameDay = last && last.date === today;
+    const sameValues = last
+      && last.assets === totals.assets
+      && last.liabilities === totals.liabilities;
+    if (sameValues) return; // nothing changed
+    const next = sameDay
+      ? [...history.slice(0, -1), { date: today, ...totals }]
+      : [...history, { date: today, ...totals }];
+    // cap history at ~2 years of daily points
+    const trimmed = next.length > 800 ? next.slice(next.length - 800) : next;
+    if (JSON.stringify(trimmed) === JSON.stringify(history)) return;
+    setData((prev) => ({ ...prev, _history: trimmed }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.realEstate, data.vehicles, data.bankAccounts, data.investments,
+      data.otherAssets, data.creditCards, data.loans, data.otherDebts,
+      data._customCategories, allCategories]);
+
+  // ── Auto-push to server (debounced) ──────────────
+  useEffect(() => {
+    if (!isConfigured) return;
+    if (skipNextAutoPushRef.current) {
+      skipNextAutoPushRef.current = false;
+      return;
+    }
+    if (autoPushTimerRef.current) clearTimeout(autoPushTimerRef.current);
+    autoPushTimerRef.current = setTimeout(() => {
+      push(data);
+    }, AUTO_PUSH_DELAY_MS);
+    return () => {
+      if (autoPushTimerRef.current) clearTimeout(autoPushTimerRef.current);
+    };
+  }, [data, isConfigured, push]);
 
   // ── CRUD helpers ─────────────────────────────────
   const openAddModal = (categoryKey) => {
@@ -113,6 +187,7 @@ const Patrimony = ({ syncAlias }) => {
     reader.onload = (ev) => {
       try {
         const parsed = JSON.parse(ev.target.result);
+        skipNextAutoPushRef.current = true;
         setData({ ...DEFAULT_DATA, ...parsed });
       } catch {
         alert('Invalid JSON file.');
@@ -199,14 +274,22 @@ const Patrimony = ({ syncAlias }) => {
         <button className="btn-danger" onClick={handleClear}>
           🗑 Clear All
         </button>
+        <button className="btn-secondary" onClick={() => setShowTrend((v) => !v)}>
+          {showTrend ? '📉 Hide Trend' : '📈 Show Trend'}
+        </button>
         {isConfigured && (
           <span className="supabase-sync-bar">
+            {/* Manual Push hidden: auto-push (debounced) handles this now.
             <button className="btn-push" disabled={syncing} onClick={() => push(data)}>
               ☁↑ Push
             </button>
+            */}
             <button className="btn-pull" disabled={syncing} onClick={async () => {
               const remote = await pull();
-              if (remote) setData({ ...DEFAULT_DATA, ...remote });
+              if (remote) {
+                skipNextAutoPushRef.current = true;
+                setData({ ...DEFAULT_DATA, ...remote });
+              }
             }}>
               ☁↓ Pull
             </button>
@@ -222,6 +305,13 @@ const Patrimony = ({ syncAlias }) => {
       <div className="chart-panel">
         <DonutChart data={data} categories={allCategories} size={150} />
       </div>
+
+      {showTrend && (
+        <div className="chart-panel">
+          <h3 className="trend-title">Net Worth Over Time</h3>
+          <TrendChart history={data._history || []} />
+        </div>
+      )}
 
       {allCategories.map((cat) => {
         const isCustom = cat.key.startsWith('custom_');
