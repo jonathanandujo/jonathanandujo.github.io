@@ -23,7 +23,18 @@ const Patrimony = ({ syncAlias }) => {
   const [confirmState, setConfirmState] = useState(null); // { title, message, onConfirm }
   const [allCollapsed, setAllCollapsed] = useState(false);
   const fileInputRef = useRef();
+  const autoPulledRef = useRef(false);
   const { push, pull, syncing, lastSync, error: syncError, isConfigured } = useSupabaseSync('patrimony', syncAlias);
+
+  // ── Auto-pull latest version from server on load ─
+  useEffect(() => {
+    if (!isConfigured || autoPulledRef.current) return;
+    autoPulledRef.current = true;
+    (async () => {
+      const remote = await pull();
+      if (remote) setData({ ...DEFAULT_DATA, ...remote });
+    })();
+  }, [isConfigured, pull]);
 
   // ── Merge built-in + custom categories (assets first, then liabilities) ─
   const allCategories = useMemo(() => {

@@ -505,8 +505,37 @@
   .summary-row { flex-direction: column; }
   .donut-wrapper { flex-direction: column; }
   .donut-svg { width: 140px; height: 140px; }
-  .items-table { table-layout: auto; }
+
+  /* Allow the items table to scroll horizontally so the
+     edit/delete action buttons remain reachable on small screens. */
+  .category-body {
+    padding: 8px 8px 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .items-table {
+    table-layout: auto;
+    min-width: 360px; /* keeps columns from collapsing too much */
+  }
+  .items-table th,
+  .items-table td {
+    padding: 6px 6px;
+    font-size: 12px;
+  }
   .items-table td { white-space: normal; }
+
+  /* Lock the actions column so the buttons are always visible. */
+  .items-table th.col-actions,
+  .items-table .actions {
+    width: 72px;
+    min-width: 72px;
+    white-space: nowrap;
+  }
+  .items-table .actions button {
+    font-size: 15px;
+    padding: 4px 4px;
+  }
+
   .modal { padding: 18px; width: 100%; }
 }
 
