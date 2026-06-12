@@ -9,6 +9,7 @@ import MinigamesHub from './apps/minigames/MinigamesHub';
 import PenguinGame from './apps/minigames/penguin/PenguinGame';
 import DolphinGame from './apps/minigames/dolphin/DolphinGame';
 import ExerciseApp from './apps/exercise/ExerciseApp';
+import SpinWheel from './apps/spin/App';
 import SyncPanel from './supabase/SyncPanel';
 import { getSyncAlias } from './supabase/supabaseClient';
 // import Minesweeper from './apps/minesweeper/Minesweeper';
@@ -54,6 +55,7 @@ function App() {
             <Route path="/minigames/dolphin" element={<DolphinGame syncAlias={syncAlias} />} />
             <Route path="/exercise" element={<ExerciseApp syncAlias={syncAlias} />} />
             <Route path="/event/:id" element={<Event />} />
+            <Route path="/spin" element={<SpinWheel />} />
             {/* <Route path="/minesweeper" element={<Minesweeper />} /> */}
           </Routes>
         </main>
