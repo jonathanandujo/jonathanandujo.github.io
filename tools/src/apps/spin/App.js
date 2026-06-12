@@ -11,6 +11,9 @@ const RADIUS = 200;
 const CENTER = 220;
 const SVG_SIZE = 440;
 
+const RING_COLORS = ['#ef4444', '#3b82f6', '#22c55e'];
+const CHEAT_COLOR = '#3b82f6';
+
 function polarToCartesian(cx, cy, r, angleDeg) {
   const a = ((angleDeg - 90) * Math.PI) / 180.0;
   return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
@@ -35,7 +38,11 @@ function SpinWheel() {
   const [spinning, setSpinning] = useState(false);
   const [winner, setWinner] = useState(null);
   const [winnerIdx, setWinnerIdx] = useState(null);
+  const [ringClicks, setRingClicks] = useState(0);
   const wheelRef = useRef(null);
+
+  const ringColor = RING_COLORS[ringClicks % RING_COLORS.length];
+  const cheatUnlocked = ringColor === CHEAT_COLOR;
 
   const names = useMemo(
     () =>
@@ -52,7 +59,9 @@ function SpinWheel() {
   const handleSpin = () => {
     if (spinning || total === 0 || seconds <= 0) return;
 
-    const targetIdx = ((seconds - 1) % total + total) % total;
+    const targetIdx = cheatUnlocked
+      ? ((seconds - 1) % total + total) % total
+      : Math.floor(Math.random() * total);
     const sliceCenter = (targetIdx + 0.5) * sliceAngle;
     const spins = Math.max(3, Math.floor(seconds));
     const base = rotation - (rotation % 360);
@@ -120,14 +129,30 @@ function SpinWheel() {
         </div>
 
         <div className="spin-stage">
-          <div className="spin-pointer" aria-hidden="true" />
+          <button
+            type="button"
+            className="spin-pointer"
+            aria-label="pointer"
+            onClick={() => {
+              if (spinning) return;
+              setRingClicks((c) => (c + 1) % RING_COLORS.length);
+            }}
+          />
           <svg
             ref={wheelRef}
             className="spin-wheel"
             width={SVG_SIZE}
             height={SVG_SIZE}
             viewBox={`0 0 ${SVG_SIZE} ${SVG_SIZE}`}
-            style={{ transform: `rotate(${rotation}deg)` }}
+            onClick={() => {
+              if (spinning) return;
+              setRingClicks((c) => (c + 1) % RING_COLORS.length);
+            }}
+            style={{
+              transform: `rotate(${rotation}deg)`,
+              boxShadow: `0 0 0 8px rgba(15, 23, 42, 0.9), 0 0 0 10px ${ringColor}, 0 0 40px rgba(34, 211, 238, 0.35), 0 25px 60px rgba(0, 0, 0, 0.6)`,
+              cursor: spinning ? 'default' : 'pointer',
+            }}
           >
             {total === 0 ? (
               <circle cx={CENTER} cy={CENTER} r={RADIUS} fill="#1e293b" />
@@ -167,8 +192,20 @@ function SpinWheel() {
                 );
               })
             )}
-            <circle cx={CENTER} cy={CENTER} r={26} fill="#0f172a" stroke="#f472b6" strokeWidth={3} />
-            <circle cx={CENTER} cy={CENTER} r={10} fill="#fbbf24" />
+            <circle cx={CENTER} cy={CENTER} r={26} fill="#0f172a" stroke={ringColor} strokeWidth={3} />
+            <circle cx={CENTER} cy={CENTER} r={10} fill={ringColor} />
+            <circle
+              cx={CENTER}
+              cy={CENTER}
+              r={26}
+              fill="transparent"
+              style={{ cursor: 'pointer' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (spinning) return;
+                setRingClicks(0);
+              }}
+            />
           </svg>
         </div>
       </div>

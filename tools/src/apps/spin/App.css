@@ -169,12 +169,19 @@
   transform: translateX(-50%);
   width: 0;
   height: 0;
+  padding: 0;
+  background: transparent;
   border-left: 20px solid transparent;
   border-right: 20px solid transparent;
   border-top: 36px solid #f472b6;
+  border-bottom: none;
   filter: drop-shadow(0 4px 8px rgba(244, 114, 182, 0.6));
   z-index: 3;
+  cursor: pointer;
+  transition: border-top-color 0.2s ease, filter 0.2s ease;
 }
+
+.spin-pointer:focus { outline: none; }
 
 .spin-wheel {
   display: block;
@@ -183,11 +190,7 @@
   margin-top: 30px;
   position: relative;
   z-index: 1;
-  box-shadow:
-    0 0 0 8px rgba(15, 23, 42, 0.9),
-    0 0 0 10px rgba(244, 114, 182, 0.5),
-    0 0 40px rgba(34, 211, 238, 0.35),
-    0 25px 60px rgba(0, 0, 0, 0.6);
+  transition: box-shadow 0.3s ease;
 }
 
 .spin-slice {
