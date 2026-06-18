@@ -167,6 +167,21 @@ const Patrimony = ({ syncAlias }) => {
     });
   };
 
+  const handleReorder = (categoryKey, fromIndex, toIndex) => {
+    if (fromIndex === toIndex || fromIndex == null || toIndex == null) return;
+    setData((prev) => {
+      const updated = { ...prev };
+      const list = [...(updated[categoryKey] || [])];
+      if (fromIndex < 0 || fromIndex >= list.length || toIndex < 0 || toIndex >= list.length) {
+        return prev;
+      }
+      const [moved] = list.splice(fromIndex, 1);
+      list.splice(toIndex, 0, moved);
+      updated[categoryKey] = list;
+      return updated;
+    });
+  };
+
   // ── JSON Download ────────────────────────────────
   const handleDownload = () => {
     const json = JSON.stringify(data, null, 2);
@@ -324,6 +339,7 @@ const Patrimony = ({ syncAlias }) => {
             onAdd={openAddModal}
             onEdit={openEditModal}
             onDelete={handleDelete}
+            onReorder={handleReorder}
             isCustom={isCustom}
             onEditCategory={isCustom ? () => setCatModalState({ category: cat }) : undefined}
             onDeleteCategory={isCustom ? () => handleDeleteCategory(cat.key) : undefined}

@@ -232,6 +232,7 @@
 .items-table th.col-extra  { width: 20%; }
 .items-table th.col-notes  { width: 20%; }
 .items-table th.col-actions { width: 10%; text-align: right; }
+.items-table th.col-drag { width: 34px; text-align: center; }
 
 .items-table td {
   padding: 6px 8px;
@@ -259,6 +260,16 @@
   white-space: nowrap;
 }
 
+.items-table .drag-cell {
+  text-align: center;
+  width: 34px;
+  padding: 4px 2px;
+}
+
+.items-table tr.drag-over-row td {
+  background: #eff6ff;
+}
+
 .items-table .actions button {
   background: none;
   border: none;
@@ -271,6 +282,28 @@
 
 .items-table .actions button:hover {
   background: #f3f4f6;
+}
+
+.drag-row-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 28px;
+  border-radius: 4px;
+  color: #64748b;
+  cursor: grab;
+  user-select: none;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.drag-row-handle:hover {
+  background: #f3f4f6;
+}
+
+.drag-row-handle:active {
+  cursor: grabbing;
 }
 
 .add-item-btn {
@@ -531,9 +564,19 @@
     min-width: 72px;
     white-space: nowrap;
   }
+  .items-table th.col-drag,
+  .items-table .drag-cell {
+    width: 26px;
+    min-width: 26px;
+  }
   .items-table .actions button {
     font-size: 15px;
     padding: 4px 4px;
+  }
+  .drag-row-handle {
+    width: 16px;
+    height: 24px;
+    font-size: 12px;
   }
 
   .modal { padding: 18px; width: 100%; }

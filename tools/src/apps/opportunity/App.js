@@ -69,6 +69,8 @@ export default function OpportunityCost({ syncAlias }) {
   const frequency = state.frequency;
   const [modalState, setModalState] = useState(null); // { index: number | null }
   const [confirmState, setConfirmState] = useState(null); // { title, message, onConfirm, confirmLabel?, danger? }
+  const [dragOverIndex, setDragOverIndex] = useState(null);
+  const dragFromIndexRef = useRef(null);
 
   const autoPulledRef = useRef(false);
   const autoPushTimerRef = useRef(null);
@@ -188,6 +190,41 @@ export default function OpportunityCost({ syncAlias }) {
     setState((prev) => ({ ...prev, frequency: nextFrequency }));
   };
 
+  const reorderRows = (fromIndex, toIndex) => {
+    if (fromIndex === toIndex || fromIndex === null || toIndex === null) return;
+    setState((prev) => {
+      const next = [...prev.rows];
+      const [moved] = next.splice(fromIndex, 1);
+      next.splice(toIndex, 0, moved);
+      return { ...prev, rows: next };
+    });
+  };
+
+  const onDragStart = (index) => (e) => {
+    dragFromIndexRef.current = index;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(index));
+  };
+
+  const onDragOver = (index) => (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverIndex(index);
+  };
+
+  const onDrop = (index) => (e) => {
+    e.preventDefault();
+    const fromIndex = dragFromIndexRef.current;
+    reorderRows(fromIndex, index);
+    dragFromIndexRef.current = null;
+    setDragOverIndex(null);
+  };
+
+  const onDragEnd = () => {
+    dragFromIndexRef.current = null;
+    setDragOverIndex(null);
+  };
+
   const totalPeriodicReturn = useMemo(
     () => rows.reduce((sum, row) => sum + computePeriodicReturn(row.amount, row.annualRate, frequency), 0),
     [rows, frequency],
@@ -253,6 +290,7 @@ export default function OpportunityCost({ syncAlias }) {
         <table className="opportunity-table">
           <thead>
             <tr>
+              <th className="drag-col" title="Drag">⋮⋮</th>
               <th className="name-col">Name</th>
               <th className="num amount-col">Amount</th>
               <th className="num rate-col">
@@ -270,7 +308,24 @@ export default function OpportunityCost({ syncAlias }) {
             {rows.map((row, idx) => {
               const periodicReturn = computePeriodicReturn(row.amount, row.annualRate, frequency);
               return (
-                <tr key={row.id}>
+                <tr
+                  key={row.id}
+                  className={dragOverIndex === idx ? 'drag-over-row' : ''}
+                  onDragOver={onDragOver(idx)}
+                  onDrop={onDrop(idx)}
+                >
+                  <td className="drag-col" data-label="Move">
+                    <span
+                      className="drag-handle"
+                      draggable
+                      onDragStart={onDragStart(idx)}
+                      onDragEnd={onDragEnd}
+                      title="Drag to reorder"
+                      aria-label="Drag to reorder"
+                    >
+                      ⋮⋮
+                    </span>
+                  </td>
                   <td className="name-col" data-label="Name" title={row.name || ''}>
                     {row.name || '—'}
                   </td>

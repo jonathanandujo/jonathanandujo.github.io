@@ -6,8 +6,10 @@ const formatMoney = (n) => {
   return n < 0 ? `-$${formatted}` : `$${formatted}`;
 };
 
-const CategorySection = ({ category, items, forceCollapsed, onAdd, onEdit, onDelete, isCustom, onEditCategory, onDeleteCategory }) => {
+const CategorySection = ({ category, items, forceCollapsed, onAdd, onEdit, onDelete, onReorder, isCustom, onEditCategory, onDeleteCategory }) => {
   const [open, setOpen] = useState(true);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
+  const [draggingIndex, setDraggingIndex] = useState(null);
 
   React.useEffect(() => {
     setOpen(!forceCollapsed);
@@ -15,6 +17,35 @@ const CategorySection = ({ category, items, forceCollapsed, onAdd, onEdit, onDel
 
   const total = items.reduce((s, i) => s + Number(i.value || 0), 0);
   const isLiability = category.type === 'liability';
+
+  const onDragStart = (idx) => (e) => {
+    setDraggingIndex(idx);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(idx));
+  };
+
+  const onDragOver = (idx) => (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverIndex(idx);
+  };
+
+  const onDrop = (idx) => (e) => {
+    e.preventDefault();
+    const raw = e.dataTransfer.getData('text/plain');
+    const parsed = Number(raw);
+    const fromIdx = Number.isInteger(parsed) ? parsed : draggingIndex;
+    if (fromIdx !== null && onReorder) {
+      onReorder(category.key, fromIdx, idx);
+    }
+    setDragOverIndex(null);
+    setDraggingIndex(null);
+  };
+
+  const onDragEnd = () => {
+    setDragOverIndex(null);
+    setDraggingIndex(null);
+  };
 
   return (
     <div className="category-section">
@@ -47,6 +78,7 @@ const CategorySection = ({ category, items, forceCollapsed, onAdd, onEdit, onDel
             <table className="items-table">
               <thead>
                 <tr>
+                  <th className="col-drag" title="Drag">⋮⋮</th>
                   {category.fields.map((f) => {
                     let colClass = 'col-extra';
                     if (f === 'name') colClass = 'col-name';
@@ -63,7 +95,24 @@ const CategorySection = ({ category, items, forceCollapsed, onAdd, onEdit, onDel
               </thead>
               <tbody>
                 {items.map((item, idx) => (
-                  <tr key={item.id || idx}>
+                  <tr
+                    key={item.id || idx}
+                    className={dragOverIndex === idx ? 'drag-over-row' : ''}
+                    onDragOver={onDragOver(idx)}
+                    onDrop={onDrop(idx)}
+                  >
+                    <td className="drag-cell">
+                      <span
+                        className="drag-row-handle"
+                        draggable
+                        onDragStart={onDragStart(idx)}
+                        onDragEnd={onDragEnd}
+                        title="Drag to reorder"
+                        aria-label="Drag to reorder"
+                      >
+                        ⋮⋮
+                      </span>
+                    </td>
                     {category.fields.map((f) => (
                       <td
                         key={f}

@@ -170,11 +170,23 @@
   text-align: right;
 }
 
+.opportunity-table th.drag-col,
+.opportunity-table td.drag-col {
+  width: 28px;
+  text-align: center;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
 .opportunity-table th.actions,
 .opportunity-table td.actions {
   text-align: center;
   width: 82px;
   white-space: nowrap;
+}
+
+.opportunity-table tr.drag-over-row td {
+  background: #eff6ff;
 }
 
 .opportunity-table th.name-col,
@@ -256,6 +268,24 @@
 
 .icon-delete-btn:hover {
   background: #ffe4e6;
+}
+
+.drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 34px;
+  margin-right: 0;
+  color: #64748b;
+  cursor: grab;
+  user-select: none;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
 }
 
 .table-bottom-actions {
@@ -477,6 +507,11 @@
     width: 64px;
   }
 
+  .opportunity-table th.drag-col,
+  .opportunity-table td.drag-col {
+    width: 24px;
+  }
+
   .opportunity-table th.name-col,
   .opportunity-table td.name-col {
     width: 64px;
@@ -514,6 +549,12 @@
     width: 30px;
     height: 30px;
     font-size: 14px;
+  }
+
+  .drag-handle {
+    height: 30px;
+    margin-right: 4px;
+    font-size: 13px;
   }
 
   .table-bottom-actions {
