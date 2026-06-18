@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSupabaseSync } from '../../supabase/useSupabaseSync';
+import ItemModal from './components/ItemModal';
+import ConfirmModal from './components/ConfirmModal';
 import '../../supabase/SyncPanel.css';
 import './Opportunity.css';
 
@@ -65,6 +67,8 @@ export default function OpportunityCost({ syncAlias }) {
 
   const rows = state.rows;
   const frequency = state.frequency;
+  const [modalState, setModalState] = useState(null); // { index: number | null }
+  const [confirmState, setConfirmState] = useState(null); // { title, message, onConfirm, confirmLabel?, danger? }
 
   const autoPulledRef = useRef(false);
   const autoPushTimerRef = useRef(null);
@@ -124,27 +128,60 @@ export default function OpportunityCost({ syncAlias }) {
     };
   }, [rows, frequency, isConfigured, push]);
 
-  const updateRow = (id, field, value) => {
-    setState((prev) => ({
-      ...prev,
-      rows: prev.rows.map((row) => (row.id === id ? { ...row, [field]: value } : row)),
-    }));
+  const openAddModal = () => {
+    setModalState({ index: null });
   };
 
-  const addRow = () => {
-    setState((prev) => ({ ...prev, rows: [...prev.rows, makeRow()] }));
+  const openEditModal = (index) => {
+    setModalState({ index });
   };
 
-  const removeRow = (id) => {
+  const handleSave = (item) => {
     setState((prev) => {
-      const next = prev.rows.filter((row) => row.id !== id);
-      return { ...prev, rows: next.length > 0 ? next : [makeRow()] };
+      if (modalState?.index === null || modalState?.index === undefined) {
+        return { ...prev, rows: [...prev.rows, { ...item, id: Date.now() + Math.floor(Math.random() * 1000) }] };
+      }
+
+      const next = [...prev.rows];
+      const existing = next[modalState.index] || {};
+      next[modalState.index] = { ...existing, ...item };
+      return { ...prev, rows: next };
+    });
+    setModalState(null);
+  };
+
+  const handleDelete = (id) => {
+    const rowName = rows.find((row) => row.id === id)?.name?.trim() || 'this account';
+    setConfirmState({
+      title: 'Delete Account',
+      message: `Are you sure you want to delete "${rowName}"?`,
+      confirmLabel: 'Delete',
+      danger: true,
+      onConfirm: () => {
+        setState((prev) => {
+          const next = prev.rows.filter((row) => row.id !== id);
+          return { ...prev, rows: next.length > 0 ? next : [makeRow()] };
+        });
+        setConfirmState(null);
+      },
     });
   };
 
+  const addRow = () => {
+    openAddModal();
+  };
+
   const clearAll = () => {
-    if (!window.confirm('Are you sure you want to reset the table? This will remove all accounts.')) return;
-    setState((prev) => ({ ...prev, rows: [makeRow()] }));
+    setConfirmState({
+      title: 'Reset Table',
+      message: 'Clear all opportunity accounts? This cannot be undone.',
+      confirmLabel: 'Reset',
+      danger: true,
+      onConfirm: () => {
+        setState((prev) => ({ ...prev, rows: [makeRow()] }));
+        setConfirmState(null);
+      },
+    });
   };
 
   const changeFrequency = (nextFrequency) => {
@@ -154,6 +191,11 @@ export default function OpportunityCost({ syncAlias }) {
   const totalPeriodicReturn = useMemo(
     () => rows.reduce((sum, row) => sum + computePeriodicReturn(row.amount, row.annualRate, frequency), 0),
     [rows, frequency],
+  );
+
+  const totalAmount = useMemo(
+    () => rows.reduce((sum, row) => sum + toNumber(row.amount), 0),
+    [rows],
   );
 
   const totalAnnualReturn = useMemo(
@@ -185,6 +227,10 @@ export default function OpportunityCost({ syncAlias }) {
         </div>
         <div className="toolbar-metrics">
           <div className="metric-item">
+            <span className="metric-label">Total amount</span>
+            <strong>{currencyFmt.format(totalAmount)}</strong>
+          </div>
+          <div className="metric-item">
             <span className="metric-label">Annual return</span>
             <strong>{currencyFmt.format(totalAnnualReturn)}</strong>
           </div>
@@ -207,51 +253,48 @@ export default function OpportunityCost({ syncAlias }) {
         <table className="opportunity-table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th className="num">Amount</th>
-              <th className="num">Annual rate (%)</th>
-              <th className="num">Calculated value</th>
+              <th className="name-col">Name</th>
+              <th className="num amount-col">Amount</th>
+              <th className="num rate-col">
+                <span className="th-main">Annual</span>
+                <span className="th-sub">rate %</span>
+              </th>
+              <th className="num value-col">
+                <span className="th-main">Calculated</span>
+                <span className="th-sub">return</span>
+              </th>
               <th className="actions">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((row) => {
+            {rows.map((row, idx) => {
               const periodicReturn = computePeriodicReturn(row.amount, row.annualRate, frequency);
               return (
                 <tr key={row.id}>
-                  <td>
-                    <input
-                      type="text"
-                      value={row.name}
-                      onChange={(e) => updateRow(row.id, 'name', e.target.value)}
-                      placeholder="MercadoPago"
-                    />
+                  <td className="name-col" data-label="Name" title={row.name || ''}>
+                    {row.name || '—'}
                   </td>
-                  <td className="num">
-                    <input
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      value={row.amount}
-                      onChange={(e) => updateRow(row.id, 'amount', e.target.value)}
-                      placeholder="20000"
-                    />
+                  <td className="num amount-col" data-label="Amount">
+                    {currencyFmt.format(toNumber(row.amount))}
                   </td>
-                  <td className="num">
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={row.annualRate}
-                      onChange={(e) => updateRow(row.id, 'annualRate', e.target.value)}
-                      placeholder="50"
-                    />
+                  <td className="num rate-col" data-label="Annual rate (%)">
+                    {toNumber(row.annualRate).toFixed(2)}%
                   </td>
-                  <td className="num result-cell">{currencyFmt.format(periodicReturn)}</td>
-                  <td className="actions">
+                  <td className="num result-cell value-col" data-label="Calculated value">{currencyFmt.format(periodicReturn)}</td>
+                  <td className="actions" data-label="Actions">
+                    <button
+                      type="button"
+                      className="icon-edit-btn"
+                      onClick={() => openEditModal(idx)}
+                      title="Edit account"
+                      aria-label="Edit account"
+                    >
+                      ✏️
+                    </button>
                     <button
                       type="button"
                       className="icon-delete-btn"
-                      onClick={() => removeRow(row.id)}
+                      onClick={() => handleDelete(row.id)}
                       title="Remove account"
                       aria-label="Remove account"
                     >
@@ -268,9 +311,24 @@ export default function OpportunityCost({ syncAlias }) {
         </div>
       </div>
 
-      <p className="opportunity-note">
-        Example: amount 20000 with annual rate 50% returns 10000 yearly, around 27.40 daily.
-      </p>
+      {modalState && (
+        <ItemModal
+          item={modalState.index !== null && modalState.index !== undefined ? rows[modalState.index] : null}
+          onSave={handleSave}
+          onCancel={() => setModalState(null)}
+        />
+      )}
+
+      {confirmState && (
+        <ConfirmModal
+          title={confirmState.title}
+          message={confirmState.message}
+          confirmLabel={confirmState.confirmLabel}
+          danger={confirmState.danger}
+          onConfirm={confirmState.onConfirm}
+          onCancel={() => setConfirmState(null)}
+        />
+      )}
     </div>
   );
 }
