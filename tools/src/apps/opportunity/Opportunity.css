@@ -1,0 +1,237 @@
+.opportunity-app {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 18px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #111827;
+}
+
+.opportunity-app h1 {
+  margin: 0;
+  font-size: 27px;
+  letter-spacing: 0.2px;
+}
+
+.opportunity-subtitle {
+  margin: 4px 0 14px;
+  color: #4b5563;
+}
+
+.card {
+  background: linear-gradient(135deg, #f8fbff, #edf5ff 60%, #eaf9f2);
+  border: 1px solid #dbe6f4;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
+}
+
+.opportunity-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  padding: 12px;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.main-frequency-control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #334155;
+}
+
+.main-frequency-control select {
+  min-width: 180px;
+  border: 1px solid #b8c6dc;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.toolbar-metrics {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 150px;
+  background: #ffffff;
+  border: 1px solid #dce4f0;
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.metric-item strong {
+  color: #0f172a;
+  font-size: 19px;
+}
+
+.metric-label {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.metric-accent {
+  background: #eaf8ee;
+  border-color: #bde7c7;
+}
+
+.metric-accent strong {
+  color: #166534;
+}
+
+.opportunity-app button {
+  border: none;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.2s ease;
+}
+
+.opportunity-app button:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-primary:hover { background: #1d4ed8; }
+.btn-secondary { background: #e5e7eb; color: #374151; }
+.btn-secondary:hover { background: #d1d5db; }
+
+.danger-soft {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.danger-soft:hover {
+  background: #fee2e2;
+}
+
+.opportunity-table-wrap {
+  overflow-x: auto;
+  background: linear-gradient(180deg, #ffffff, #fafcff);
+  border: 1px solid #dce4f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.06);
+}
+
+.opportunity-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.opportunity-table th,
+.opportunity-table td {
+  border-bottom: 1px solid #f3f4f6;
+  padding: 8px;
+  vertical-align: middle;
+}
+
+.opportunity-table th {
+  text-align: left;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #6b7280;
+  background: #f8fafc;
+}
+
+.opportunity-table th.num,
+.opportunity-table td.num {
+  text-align: right;
+}
+
+.opportunity-table th.actions,
+.opportunity-table td.actions {
+  text-align: center;
+  width: 70px;
+}
+
+.opportunity-table input,
+.opportunity-table select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 13px;
+  background: #fff;
+}
+
+.opportunity-table input:focus,
+.opportunity-table select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.result-cell {
+  font-weight: 700;
+  color: #166534;
+  white-space: nowrap;
+}
+
+.icon-delete-btn {
+  width: 34px;
+  height: 34px;
+  line-height: 1;
+  padding: 0;
+  border-radius: 50%;
+  background: #fff1f2;
+  color: #be123c;
+  border: 1px solid #fecdd3;
+  font-size: 16px;
+}
+
+.icon-delete-btn:hover {
+  background: #ffe4e6;
+}
+
+.table-bottom-actions {
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+}
+
+.add-row-btn {
+  min-width: 170px;
+}
+
+.opportunity-note {
+  margin-top: 10px;
+  color: #4b5563;
+  font-size: 13px;
+}
+
+@media (max-width: 800px) {
+  .opportunity-toolbar {
+    padding: 10px;
+  }
+
+  .toolbar-metrics {
+    width: 100%;
+  }
+
+  .metric-item {
+    flex: 1;
+    min-width: 0;
+  }
+}
