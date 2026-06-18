@@ -296,8 +296,6 @@
   user-select: none;
   font-size: 13px;
   line-height: 1;
-  touch-action: none;
-  -webkit-user-drag: none;
 }
 
 .drag-row-handle:hover {
@@ -316,8 +314,6 @@
   border: 1px dashed #93c5fd;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
   width: 100%;
   transition: background .15s;
 }
