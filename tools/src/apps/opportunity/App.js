@@ -71,6 +71,7 @@ export default function OpportunityCost({ syncAlias }) {
   const [confirmState, setConfirmState] = useState(null); // { title, message, onConfirm, confirmLabel?, danger? }
   const [dragOverIndex, setDragOverIndex] = useState(null);
   const dragFromIndexRef = useRef(null);
+  const touchDragFromIndexRef = useRef(null);
 
   const autoPulledRef = useRef(false);
   const autoPushTimerRef = useRef(null);
@@ -214,7 +215,9 @@ export default function OpportunityCost({ syncAlias }) {
 
   const onDrop = (index) => (e) => {
     e.preventDefault();
-    const fromIndex = dragFromIndexRef.current;
+    const raw = e.dataTransfer.getData('text/plain');
+    const parsed = Number(raw);
+    const fromIndex = Number.isInteger(parsed) ? parsed : dragFromIndexRef.current;
     reorderRows(fromIndex, index);
     dragFromIndexRef.current = null;
     setDragOverIndex(null);
@@ -222,6 +225,32 @@ export default function OpportunityCost({ syncAlias }) {
 
   const onDragEnd = () => {
     dragFromIndexRef.current = null;
+    setDragOverIndex(null);
+  };
+
+  const onTouchStartHandle = (index) => () => {
+    touchDragFromIndexRef.current = index;
+    setDragOverIndex(index);
+  };
+
+  const onTouchMoveHandle = (e) => {
+    if (touchDragFromIndexRef.current == null) return;
+    const touch = e.touches?.[0];
+    if (!touch) return;
+    const hovered = document.elementFromPoint(touch.clientX, touch.clientY);
+    const row = hovered?.closest?.('tr[data-row-index]');
+    const idx = Number(row?.getAttribute('data-row-index'));
+    if (Number.isInteger(idx)) {
+      setDragOverIndex(idx);
+    }
+    e.preventDefault();
+  };
+
+  const onTouchEndHandle = () => {
+    const fromIndex = touchDragFromIndexRef.current;
+    const toIndex = dragOverIndex ?? fromIndex;
+    reorderRows(fromIndex, toIndex);
+    touchDragFromIndexRef.current = null;
     setDragOverIndex(null);
   };
 
@@ -310,6 +339,7 @@ export default function OpportunityCost({ syncAlias }) {
               return (
                 <tr
                   key={row.id}
+                  data-row-index={idx}
                   className={dragOverIndex === idx ? 'drag-over-row' : ''}
                   onDragOver={onDragOver(idx)}
                   onDrop={onDrop(idx)}
@@ -320,6 +350,10 @@ export default function OpportunityCost({ syncAlias }) {
                       draggable
                       onDragStart={onDragStart(idx)}
                       onDragEnd={onDragEnd}
+                      onTouchStart={onTouchStartHandle(idx)}
+                      onTouchMove={onTouchMoveHandle}
+                      onTouchEnd={onTouchEndHandle}
+                      onTouchCancel={onTouchEndHandle}
                       title="Drag to reorder"
                       aria-label="Drag to reorder"
                     >

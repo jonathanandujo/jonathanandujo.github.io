@@ -282,6 +282,8 @@
   user-select: none;
   font-size: 14px;
   line-height: 1;
+  touch-action: none;
+  -webkit-user-drag: none;
 }
 
 .drag-handle:active {

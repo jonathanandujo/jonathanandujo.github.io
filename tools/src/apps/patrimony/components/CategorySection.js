@@ -47,6 +47,34 @@ const CategorySection = ({ category, items, forceCollapsed, onAdd, onEdit, onDel
     setDraggingIndex(null);
   };
 
+  const onTouchStartHandle = (idx) => () => {
+    setDraggingIndex(idx);
+    setDragOverIndex(idx);
+  };
+
+  const onTouchMoveHandle = (e) => {
+    if (draggingIndex == null) return;
+    const touch = e.touches?.[0];
+    if (!touch) return;
+    const hovered = document.elementFromPoint(touch.clientX, touch.clientY);
+    const row = hovered?.closest?.('tr[data-row-index]');
+    const idx = Number(row?.getAttribute('data-row-index'));
+    if (Number.isInteger(idx)) {
+      setDragOverIndex(idx);
+    }
+    e.preventDefault();
+  };
+
+  const onTouchEndHandle = () => {
+    const fromIdx = draggingIndex;
+    const toIdx = dragOverIndex ?? fromIdx;
+    if (fromIdx !== null && onReorder) {
+      onReorder(category.key, fromIdx, toIdx);
+    }
+    setDragOverIndex(null);
+    setDraggingIndex(null);
+  };
+
   return (
     <div className="category-section">
       <div className="category-header" onClick={() => setOpen(!open)}>
@@ -97,6 +125,7 @@ const CategorySection = ({ category, items, forceCollapsed, onAdd, onEdit, onDel
                 {items.map((item, idx) => (
                   <tr
                     key={item.id || idx}
+                    data-row-index={idx}
                     className={dragOverIndex === idx ? 'drag-over-row' : ''}
                     onDragOver={onDragOver(idx)}
                     onDrop={onDrop(idx)}
@@ -107,6 +136,10 @@ const CategorySection = ({ category, items, forceCollapsed, onAdd, onEdit, onDel
                         draggable
                         onDragStart={onDragStart(idx)}
                         onDragEnd={onDragEnd}
+                        onTouchStart={onTouchStartHandle(idx)}
+                        onTouchMove={onTouchMoveHandle}
+                        onTouchEnd={onTouchEndHandle}
+                        onTouchCancel={onTouchEndHandle}
                         title="Drag to reorder"
                         aria-label="Drag to reorder"
                       >
