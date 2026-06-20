@@ -1,31 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-const TodoList = (props) => {
+const TodoList = ({ title, priority, list, onAdd, onDelete, onMove, color, onColorChange }) => {
     const [inputTask, setInputTask] = useState('');
-    const [list, setList] = useState(JSON.parse(window.localStorage.getItem('dbPriority' + props.priority)) ?? []);
 
     const handleAddTodo = () => {
-        const newTask = {
-            id: crypto.randomUUID(),
-            todo: inputTask
-            //order: Math.max(...list.map(e=> e.order ?? 0),0)+1
-        };
-        setList([...list, newTask]);
+        onAdd(priority, inputTask);
         setInputTask('');
     };
 
-    useEffect(() => {
-        saveInDb();
-    }, [list]);
-
     const handleDeleteTodo = (id) => {
-        const newList = list.filter((todo) => todo.id !== id);
-        setList(newList);
+        onDelete(priority, id);
     };
 
     const handleInputChange = (event) => {
         setInputTask(event.target.value);
-        console.log(event);
     };
 
     const handleKeyDown = (e) => {
@@ -33,31 +21,21 @@ const TodoList = (props) => {
             handleAddTodo();
     }
 
-    const saveInDb = () => {
-        window.localStorage.setItem('dbPriority' + props.priority, JSON.stringify(list));
-    }
-
     const moveUp = (index) => {
         if (index > 0) {
-            const updatedList = [...list];
-            [updatedList[index], updatedList[index - 1]] =
-                [updatedList[index - 1], updatedList[index]];
-            setList(updatedList);
+            onMove(priority, index, index - 1);
         }
     }
 
     const moveDown = (index) => {
         if (index < list.length - 1) {
-            const updatedList = [...list];
-            [updatedList[index], updatedList[index + 1]] =
-                [updatedList[index + 1], updatedList[index]];
-            setList(updatedList);
+            onMove(priority, index, index + 1);
         }
     }
 
     return (
-        <div className="Todo">
-            <h1>{props.title}</h1>
+        <div className="Todo" style={{ background: color }}>
+            <h1>{title}</h1>
 
             <div className="Top">
                 <input className="input" type="text" value={inputTask}
@@ -76,7 +54,7 @@ const TodoList = (props) => {
                             ⬆
                         </button>
                         }
-                        {index < list.length -1 && <button onClick={() => moveDown(index)}>
+                        {index < list.length - 1 && <button onClick={() => moveDown(index)}>
                             ⬇
                         </button>
                         }
@@ -86,6 +64,16 @@ const TodoList = (props) => {
                     </li>
                 ))}
             </ul>
+
+            <label className="quadrant-color-picker" title="Quadrant color">
+                <span>🎨</span>
+                <input
+                    type="color"
+                    value={color}
+                    onChange={(e) => onColorChange(priority, e.target.value)}
+                    aria-label={`${title} color`}
+                />
+            </label>
         </div>
     );
 };

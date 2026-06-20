@@ -7,6 +7,7 @@ import './Opportunity.css';
 
 const STORAGE_KEY = 'opportunity-cost-data-v1';
 const AUTO_PUSH_DELAY_MS = 2000;
+const getStorageKey = (alias) => (alias ? `${STORAGE_KEY}:${alias}` : STORAGE_KEY);
 
 const FREQUENCY_OPTIONS = [
   { value: 'daily', label: 'Daily', periods: 365 },
@@ -45,7 +46,7 @@ const currencyFmt = new Intl.NumberFormat('en-US', {
 
 export default function OpportunityCost({ syncAlias }) {
   const [state, setState] = useState(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(getStorageKey(syncAlias));
     if (!stored) return { rows: [makeRow()], frequency: 'daily' };
     try {
       const parsed = JSON.parse(stored);
@@ -76,33 +77,77 @@ export default function OpportunityCost({ syncAlias }) {
   const autoPulledRef = useRef(false);
   const autoPushTimerRef = useRef(null);
   const skipNextAutoPushRef = useRef(true);
+  const localStateRef = useRef(state);
   const { push, pull, syncing, lastSync, error: syncError, isConfigured } = useSupabaseSync('opportunity-cost', syncAlias);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStateRef.current = state;
   }, [state]);
+
+  const hasMeaningfulData = (remote) => (
+    !!remote
+    && Array.isArray(remote.rows)
+    && remote.rows.length > 0
+  );
+
+  useEffect(() => {
+    const stored = localStorage.getItem(getStorageKey(syncAlias));
+    if (!stored) {
+      skipNextAutoPushRef.current = true;
+      setState({ rows: [makeRow()], frequency: 'daily' });
+      autoPulledRef.current = false;
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(stored);
+      const parsedRows = Array.isArray(parsed?.rows) && parsed.rows.length > 0 ? parsed.rows : [makeRow()];
+      const parsedFrequency = FREQUENCY_OPTIONS.some((f) => f.value === parsed?.frequency)
+        ? parsed.frequency
+        : 'daily';
+      skipNextAutoPushRef.current = true;
+      setState({ rows: parsedRows, frequency: parsedFrequency });
+    } catch {
+      skipNextAutoPushRef.current = true;
+      setState({ rows: [makeRow()], frequency: 'daily' });
+    }
+    autoPulledRef.current = false;
+  }, [syncAlias]);
+
+  useEffect(() => {
+    localStorage.setItem(getStorageKey(syncAlias), JSON.stringify(state));
+  }, [state, syncAlias]);
 
   useEffect(() => {
     if (!isConfigured || autoPulledRef.current) return;
     autoPulledRef.current = true;
-    (async () => {
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      if (cancelled) return;
       const remote = await pull();
-      if (remote?.rows && Array.isArray(remote.rows) && remote.rows.length > 0) {
+      if (cancelled) return;
+      if (hasMeaningfulData(remote)) {
         const remoteFrequency = FREQUENCY_OPTIONS.some((f) => f.value === remote.frequency)
           ? remote.frequency
           : 'daily';
         skipNextAutoPushRef.current = true;
         setState({ rows: remote.rows, frequency: remoteFrequency });
+      } else {
+        await push(localStateRef.current);
       }
-    })();
-  }, [isConfigured, pull]);
+    }, 0);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [isConfigured, pull, push, syncAlias]);
 
   useEffect(() => {
     if (!isConfigured) return;
     const onVisible = async () => {
       if (document.visibilityState !== 'visible') return;
       const remote = await pull();
-      if (remote?.rows && Array.isArray(remote.rows) && remote.rows.length > 0) {
+      if (hasMeaningfulData(remote)) {
         const remoteFrequency = FREQUENCY_OPTIONS.some((f) => f.value === remote.frequency)
           ? remote.frequency
           : 'daily';

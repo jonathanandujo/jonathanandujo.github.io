@@ -41,6 +41,15 @@ const colorOptions = [
   ["#393b79", "#5254a3", "#6b6ecf", "#9c9ede", "#637939", "#8ca252", "#b5cf6b", "#8c6d31", "#bd9e39", "#e7ba52"]
 ];
 
+const getScopedKey = (alias, key) => (alias ? `${key}:${alias}` : key);
+const sanitizeChartIds = (value) => {
+  if (!Array.isArray(value)) return [1];
+  const clean = value
+    .map((v) => Number(v))
+    .filter((v) => Number.isInteger(v) && v > 0);
+  return clean.length ? [...new Set(clean)].sort((a, b) => a - b) : [1];
+};
+
 const Sankey = ({ syncAlias }) => {
   const [inputText, setInputText] = useState(defaultChartData);  // Default value
   const [sankeyData, setSankeyData] = useState(null);
@@ -48,24 +57,52 @@ const Sankey = ({ syncAlias }) => {
   const [height, setHeight] = useState(700);
   const [fontSize, setFontSize] = useState(12);
   const [colorScheme, setColorScheme] = useState(0);
+  const [chartIds, setChartIds] = useState([1]);
   const [selectedSankeyNumber, setSelectedSankeyNumber] = useState(1);
   const svgContainerRef = useRef(); // Using container ref to ensure correct referencing
   const { push, pull, syncing, lastSync, error: syncError, isConfigured } = useSupabaseSync(`sankey-${selectedSankeyNumber}`, syncAlias);
+  const { push: pushSettings, pull: pullSettings, isConfigured: isSettingsConfigured } = useSupabaseSync('sankey-settings', syncAlias);
+  const skipNextSettingsPushRef = useRef(true);
+  const settingsPushTimerRef = useRef(null);
+  const inputTextRef = useRef(inputText);
+  const settingsRef = useRef({ width, height, fontSize, colorScheme, chartIds, selectedSankeyNumber });
+
+  useEffect(() => {
+    inputTextRef.current = inputText;
+  }, [inputText]);
+
+  useEffect(() => {
+    settingsRef.current = { width, height, fontSize, colorScheme, chartIds, selectedSankeyNumber };
+  }, [width, height, fontSize, colorScheme, chartIds, selectedSankeyNumber]);
 
   useEffect(() => {
     // Retrieve stored data from localStorage on initial load
-    const storedWidth = localStorage.getItem('sankeyWidth');
-    const storedHeight = localStorage.getItem('sankeyHeight');
-    const storedFontSize = localStorage.getItem('sankeyFontSize');
-    const storedColorScheme = localStorage.getItem('sankeyColorScheme');
+    const storedWidth = localStorage.getItem(getScopedKey(syncAlias, 'sankeyWidth'));
+    const storedHeight = localStorage.getItem(getScopedKey(syncAlias, 'sankeyHeight'));
+    const storedFontSize = localStorage.getItem(getScopedKey(syncAlias, 'sankeyFontSize'));
+    const storedColorScheme = localStorage.getItem(getScopedKey(syncAlias, 'sankeyColorScheme'));
+    const storedChartIds = localStorage.getItem(getScopedKey(syncAlias, 'sankeyChartIds'));
+    const storedSelected = localStorage.getItem(getScopedKey(syncAlias, 'sankeySelectedChart'));
 
     if (storedWidth) setWidth(Number(storedWidth));
     if (storedHeight) setHeight(Number(storedHeight));
     if (storedFontSize) setFontSize(Number(storedFontSize));
     if (storedColorScheme) setColorScheme(Number(storedColorScheme));
 
-    getDataFromLocalStorage();
-  }, []);
+    const nextChartIds = sanitizeChartIds(storedChartIds ? JSON.parse(storedChartIds) : [1]);
+    setChartIds(nextChartIds);
+    const nextSelected = Number(storedSelected || 1);
+    setSelectedSankeyNumber(nextChartIds.includes(nextSelected) ? nextSelected : nextChartIds[0]);
+  }, [syncAlias]);
+
+  useEffect(() => {
+    localStorage.setItem(getScopedKey(syncAlias, 'sankeyWidth'), width);
+    localStorage.setItem(getScopedKey(syncAlias, 'sankeyHeight'), height);
+    localStorage.setItem(getScopedKey(syncAlias, 'sankeyFontSize'), fontSize);
+    localStorage.setItem(getScopedKey(syncAlias, 'sankeyColorScheme'), colorScheme);
+    localStorage.setItem(getScopedKey(syncAlias, 'sankeyChartIds'), JSON.stringify(chartIds));
+    localStorage.setItem(getScopedKey(syncAlias, 'sankeySelectedChart'), String(selectedSankeyNumber));
+  }, [width, height, fontSize, colorScheme, chartIds, selectedSankeyNumber, syncAlias]);
 
 
   useEffect(() => {
@@ -74,7 +111,7 @@ const Sankey = ({ syncAlias }) => {
 
   useEffect(() => {
     getDataFromLocalStorage();
-  }, [selectedSankeyNumber]);
+  }, [selectedSankeyNumber, syncAlias]);
 
   const handleInputChange = (e) => {
     setInputText(e.target.value);
@@ -88,7 +125,7 @@ const Sankey = ({ syncAlias }) => {
     const data = parseInputData(inputText);
     setSankeyData(data);
     if (saveLocally) {
-      const dataKey = `sankeyData${selectedSankeyNumber}`;
+      const dataKey = getScopedKey(syncAlias, `sankeyData${selectedSankeyNumber}`);
       localStorage.setItem(dataKey, inputText);
     }
   };
@@ -117,19 +154,19 @@ const Sankey = ({ syncAlias }) => {
   };
 
   const getDataFromLocalStorage = () => {
-    const dataKey = `sankeyData${selectedSankeyNumber}`;
-    if (selectedSankeyNumber == 1) //default button
+    const dataKey = getScopedKey(syncAlias, `sankeyData${selectedSankeyNumber}`);
+    if (selectedSankeyNumber === 1) //default button
     {
       let oldData = localStorage.getItem('sankeyData');
-      if(oldData)
+      if (oldData)
       {
         localStorage.removeItem('sankeyData'); // remove previous version chart
-        localStorage.setItem('sankeyData1', oldData);
+        localStorage.setItem(getScopedKey(syncAlias, 'sankeyData1'), oldData);
       }
     }
 
     let storedData = localStorage.getItem(dataKey);
-    if(!storedData)
+    if (!storedData)
     {
       storedData = defaultChartData;
     }
@@ -137,31 +174,128 @@ const Sankey = ({ syncAlias }) => {
     // handleGenerateChart(false);
   };
 
+  const handleAddChart = () => {
+    const next = (chartIds[chartIds.length - 1] || 0) + 1;
+    const nextIds = [...chartIds, next];
+    setChartIds(nextIds);
+    setSelectedSankeyNumber(next);
+  };
+
+  const handleRemoveChart = (chartId) => {
+    if (chartIds.length <= 1) return;
+    const nextIds = chartIds.filter((id) => id !== chartId);
+    localStorage.removeItem(getScopedKey(syncAlias, `sankeyData${chartId}`));
+    setChartIds(nextIds);
+    if (selectedSankeyNumber === chartId) {
+      const idx = chartIds.indexOf(chartId);
+      const fallback = nextIds[idx - 1] || nextIds[0];
+      setSelectedSankeyNumber(fallback);
+    }
+  };
+
   const handleButtonClick = (number) => {
     setSelectedSankeyNumber(number);
   };
 
-  const handleSettingChange = () => {
-    localStorage.setItem('sankeyWidth', width);
-    localStorage.setItem('sankeyHeight', height);
-    localStorage.setItem('sankeyFontSize', fontSize);
-    localStorage.setItem('sankeyColorScheme', colorScheme);
-    handleGenerateChart(false);
-  };
+  useEffect(() => {
+    if (!isConfigured) return;
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      if (cancelled) return;
+      const remote = await pull();
+      if (cancelled) return;
+      if (remote?.text) {
+        setInputText(remote.text);
+      } else {
+        await push({ text: inputTextRef.current });
+      }
+    }, 0);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [isConfigured, pull, push, selectedSankeyNumber, syncAlias]);
+
+  useEffect(() => {
+    if (!isSettingsConfigured) return;
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      if (cancelled) return;
+      const remote = await pullSettings();
+      if (cancelled) return;
+      if (remote) {
+        skipNextSettingsPushRef.current = true;
+        const current = settingsRef.current;
+        const remoteChartIds = sanitizeChartIds(remote.chartIds || current.chartIds);
+        const remoteSelected = Number(remote.selectedSankeyNumber || current.selectedSankeyNumber || remoteChartIds[0]);
+        setWidth(Number(remote.width ?? current.width));
+        setHeight(Number(remote.height ?? current.height));
+        setFontSize(Number(remote.fontSize ?? current.fontSize));
+        setColorScheme(Number(remote.colorScheme ?? current.colorScheme));
+        setChartIds(remoteChartIds);
+        setSelectedSankeyNumber(remoteChartIds.includes(remoteSelected) ? remoteSelected : remoteChartIds[0]);
+      } else {
+        await pushSettings(settingsRef.current);
+      }
+    }, 0);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [isSettingsConfigured, pullSettings, pushSettings, syncAlias]);
+
+  useEffect(() => {
+    if (!isSettingsConfigured) return;
+    if (skipNextSettingsPushRef.current) {
+      skipNextSettingsPushRef.current = false;
+      return;
+    }
+    if (settingsPushTimerRef.current) clearTimeout(settingsPushTimerRef.current);
+    settingsPushTimerRef.current = setTimeout(() => {
+      pushSettings({ width, height, fontSize, colorScheme, chartIds, selectedSankeyNumber });
+    }, 400);
+    return () => {
+      if (settingsPushTimerRef.current) clearTimeout(settingsPushTimerRef.current);
+    };
+  }, [isSettingsConfigured, pushSettings, width, height, fontSize, colorScheme, chartIds, selectedSankeyNumber]);
 
   return (
     <div className="container">
       <div className="left-panel">
-        <div className="button-group">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-            <button
-              key={num}
-              className={`small-button ${selectedSankeyNumber === num ? 'selected' : ''}`}
-              onClick={() => handleButtonClick(num)}
-            >
-              {num}
-            </button>
-          ))}
+        <div className="chart-tabs-wrap">
+          <div className="button-group">
+            {chartIds.map((num) => (
+              <button
+                key={num}
+                className={`small-button ${selectedSankeyNumber === num ? 'selected' : ''}`}
+                onClick={() => handleButtonClick(num)}
+              >
+                <span>Chart {num}</span>
+                {chartIds.length > 1 && (
+                  <span
+                    className="small-button-close"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveChart(num);
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleRemoveChart(num);
+                      }
+                    }}
+                    aria-label={`Remove chart ${num}`}
+                    title={`Remove chart ${num}`}
+                  >
+                    ×
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+          <button className="btn-add-chart" onClick={handleAddChart}>+ Add chart</button>
         </div>
         <textarea
           value={inputText}
@@ -173,21 +307,6 @@ const Sankey = ({ syncAlias }) => {
         <button className='btnSankey' onClick={handleDownload}>Download as PNG</button>
         {isConfigured && (
           <div className="supabase-sync-bar" style={{ margin: '6px 0' }}>
-            <button className="btn-push" disabled={syncing} onClick={() => push({ text: inputText, settings: { width, height, fontSize, colorScheme } })}>
-              ☁↑ Push #{selectedSankeyNumber}
-            </button>
-            <button className="btn-pull" disabled={syncing} onClick={async () => {
-              const remote = await pull();
-              if (remote?.text) setInputText(remote.text);
-              if (remote?.settings) {
-                setWidth(remote.settings.width ?? width);
-                setHeight(remote.settings.height ?? height);
-                setFontSize(remote.settings.fontSize ?? fontSize);
-                setColorScheme(remote.settings.colorScheme ?? colorScheme);
-              }
-            }}>
-              ☁↓ Pull #{selectedSankeyNumber}
-            </button>
             {syncing && <span className="sync-info">Syncing…</span>}
             {syncError && <span className="sync-error">{syncError}</span>}
             {lastSync && !syncing && <span className="sync-info">Last: {lastSync.toLocaleTimeString()}</span>}
@@ -201,7 +320,6 @@ const Sankey = ({ syncAlias }) => {
               value={width}
               onChange={(e) => {
                 setWidth(Number(e.target.value));
-                handleSettingChange();
               }}
             />
           </label>
@@ -212,7 +330,6 @@ const Sankey = ({ syncAlias }) => {
               value={height}
               onChange={(e) => {
                 setHeight(Number(e.target.value));
-                handleSettingChange();
               }}
             />
           </label>
@@ -223,7 +340,6 @@ const Sankey = ({ syncAlias }) => {
               value={fontSize}
               onChange={(e) => {
                 setFontSize(Number(e.target.value))
-                handleSettingChange();
               }
               }
             />
@@ -232,7 +348,6 @@ const Sankey = ({ syncAlias }) => {
             Color Scheme:
             <select value={colorScheme} onChange={(e) => {
               setColorScheme(Number(e.target.value));
-              handleSettingChange();
             }
             }>
               {colorOptions.map((_, index) => (

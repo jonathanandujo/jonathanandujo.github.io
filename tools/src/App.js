@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { HashRouter as Router, Route, Routes, NavLink, Navigate } from 'react-router-dom';
-import Calculator from './apps/calculator/App';
 import Sankey from './apps/sankey/App';
 import Matrix from './apps/matrix/App';
 import Event from './apps/event/App';
@@ -33,7 +32,6 @@ function App() {
           </button>
           <nav>
             <ul>
-              <li><NavLink to="/calculator" title="Calculator"><span className="nav-icon">🧮</span><span className="nav-label">Calculator</span></NavLink></li>
               <li><NavLink to="/sankey" title="Sankey"><span className="nav-icon">📊</span><span className="nav-label">Sankey</span></NavLink></li>
               <li><NavLink to="/matrix" title="Eisenhower Matrix"><span className="nav-icon">📋</span><span className="nav-label">Eisenhower Matrix</span></NavLink></li>
               <li><NavLink to="/patrimony" title="Patrimony"><span className="nav-icon">💰</span><span className="nav-label">Patrimony</span></NavLink></li>
@@ -47,10 +45,9 @@ function App() {
         </header>
         <main>
           <Routes>
-            <Route path="/" element={<Navigate to="/calculator" />} />
-            <Route path="/calculator" element={<Calculator />} />
+            <Route path="/" element={<Navigate to="/sankey" />} />
             <Route path="/sankey" element={<Sankey syncAlias={syncAlias} />} />
-            <Route path="/matrix" element={<Matrix />} />
+            <Route path="/matrix" element={<Matrix syncAlias={syncAlias} />} />
             <Route path="/patrimony" element={<Patrimony syncAlias={syncAlias} />} />
             <Route path="/opportunity-cost" element={<OpportunityCost syncAlias={syncAlias} />} />
             <Route path="/minigames" element={<MinigamesHub />} />

@@ -1,6 +1,7 @@
 .App {
   text-align: center;
   min-height: 100vh;
+  background: radial-gradient(circle at 20% 20%, #f5f7ff 0%, #f3f0e9 45%, #eef3f8 100%);
 }
 
 .flex-grid {
@@ -8,28 +9,24 @@
   display: flex;
   flex-wrap: wrap;
   min-height: 100vh;
+  gap: 10px;
+  padding: 12px;
+  box-sizing: border-box;
 }
+
 .grid-item {
-  flex: 1 1 calc(50% - 25px);
-  background: #F90;
-  border-top: solid 1px #000;
-}
-.grid-item:nth-child(1) {
-  background: rgb(255, 114, 114);
-}
-.grid-item:nth-child(2) {
-  background: rgb(254, 189, 76);
-}
-.grid-item:nth-child(3) {
-  background: rgb(124, 253, 84);
-}
-.grid-item:nth-child(4) {
-  background: rgb(255, 252, 87);
+  flex: 1 1 calc(50% - 20px);
+  min-width: 300px;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  overflow: hidden;
 }
 
 .taskText {
   margin-right: 10px;
   font-size: 1.1rem;
+  color: #1a1f2c;
 }
 
 ol {
@@ -38,4 +35,95 @@ ol {
 
 li {
   list-style-type: none;
+}
+
+.Todo {
+  min-height: calc(50vh - 30px);
+  padding: 14px 16px 48px;
+  box-sizing: border-box;
+  position: relative;
+  backdrop-filter: blur(3px);
+}
+
+.Todo h1 {
+  margin: 0 0 12px;
+  font-size: 1.55rem;
+  color: #182133;
+}
+
+.Top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.input {
+  width: min(420px, 90%);
+  border-radius: 8px;
+  border: 1px solid rgba(24, 33, 51, 0.35);
+  padding: 10px 12px;
+  font-size: 0.95rem;
+}
+
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  background: #1e293b;
+  color: #ffffff;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.task button {
+  border: none;
+  border-radius: 6px;
+  padding: 4px 6px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.quadrant-color-picker {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(24, 33, 51, 0.25);
+  border-radius: 8px;
+  padding: 4px 6px;
+}
+
+.quadrant-color-picker input[type='color'] {
+  width: 30px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.matrix-sync-bar {
+  margin: 10px 12px 0;
+}
+
+@media (max-width: 900px) {
+  .grid-item {
+    flex: 1 1 100%;
+  }
+
+  .Todo {
+    min-height: auto;
+  }
 }

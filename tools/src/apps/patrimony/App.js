@@ -6,7 +6,7 @@ import ItemModal from './components/ItemModal';
 import CategoryModal from './components/CategoryModal';
 import ConfirmModal from './components/ConfirmModal';
 import TrendChart from './components/TrendChart';
-import { CATEGORIES, DEFAULT_DATA, STORAGE_KEY } from './dataModel';
+import { CATEGORIES, DEFAULT_DATA, getStorageKey } from './dataModel';
 import { useSupabaseSync } from '../../supabase/useSupabaseSync';
 import '../../supabase/SyncPanel.css';
 import './Patrimony.css';
@@ -26,7 +26,8 @@ const computeTotals = (data, categories) => {
 
 const Patrimony = ({ syncAlias }) => {
   const [data, setData] = useState(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const key = getStorageKey(syncAlias);
+    const stored = localStorage.getItem(key);
     if (stored) {
       try { return { ...DEFAULT_DATA, ...JSON.parse(stored) }; } catch { /* ignore */ }
     }
@@ -40,21 +41,63 @@ const Patrimony = ({ syncAlias }) => {
   const fileInputRef = useRef();
   const autoPulledRef = useRef(false);
   const autoPushTimerRef = useRef(null);
+  const localDataRef = useRef(data);
   const skipNextAutoPushRef = useRef(true); // skip the very first push (initial mount / after pull)
   const { push, pull, syncing, lastSync, error: syncError, isConfigured } = useSupabaseSync('patrimony', syncAlias);
+
+  useEffect(() => {
+    localDataRef.current = data;
+  }, [data]);
+
+  const hasMeaningfulData = (payload) => {
+    if (!payload || typeof payload !== 'object') return false;
+    return Object.keys(DEFAULT_DATA).some((key) => {
+      const value = payload[key];
+      if (Array.isArray(value)) return value.length > 0;
+      return false;
+    });
+  };
+
+  // ── Rehydrate local state when alias changes ─
+  useEffect(() => {
+    const key = getStorageKey(syncAlias);
+    const stored = localStorage.getItem(key);
+    if (stored) {
+      try {
+        skipNextAutoPushRef.current = true;
+        setData({ ...DEFAULT_DATA, ...JSON.parse(stored) });
+      } catch {
+        skipNextAutoPushRef.current = true;
+        setData({ ...DEFAULT_DATA });
+      }
+    } else {
+      skipNextAutoPushRef.current = true;
+      setData({ ...DEFAULT_DATA });
+    }
+    autoPulledRef.current = false;
+  }, [syncAlias]);
 
   // ── Auto-pull latest version from server on load ─
   useEffect(() => {
     if (!isConfigured || autoPulledRef.current) return;
     autoPulledRef.current = true;
-    (async () => {
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      if (cancelled) return;
       const remote = await pull();
-      if (remote) {
+      if (cancelled) return;
+      if (hasMeaningfulData(remote)) {
         skipNextAutoPushRef.current = true;
         setData({ ...DEFAULT_DATA, ...remote });
+      } else {
+        await push(localDataRef.current);
       }
-    })();
-  }, [isConfigured, pull]);
+    }, 0);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [isConfigured, pull, push, syncAlias]);
 
   // ── Re-pull when the tab regains focus (multi-device) ─
   useEffect(() => {
@@ -62,7 +105,7 @@ const Patrimony = ({ syncAlias }) => {
     const onVisible = async () => {
       if (document.visibilityState !== 'visible') return;
       const remote = await pull();
-      if (remote) {
+      if (hasMeaningfulData(remote)) {
         skipNextAutoPushRef.current = true;
         setData((prev) => ({ ...DEFAULT_DATA, ...remote, _history: remote._history || prev._history }));
       }
@@ -82,8 +125,9 @@ const Patrimony = ({ syncAlias }) => {
 
   // ── Persist whenever data changes ────────────────
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }, [data]);
+    const key = getStorageKey(syncAlias);
+    localStorage.setItem(key, JSON.stringify(data));
+  }, [data, syncAlias]);
 
   // ── Daily snapshot of totals into _history ───────
   useEffect(() => {
@@ -301,9 +345,11 @@ const Patrimony = ({ syncAlias }) => {
             */}
             <button className="btn-pull" disabled={syncing} onClick={async () => {
               const remote = await pull();
-              if (remote) {
+              if (hasMeaningfulData(remote)) {
                 skipNextAutoPushRef.current = true;
                 setData({ ...DEFAULT_DATA, ...remote });
+              } else {
+                await push(data);
               }
             }}>
               ☁↓ Pull

@@ -78,5 +78,11 @@ export const DEFAULT_DATA = {
 
 export const STORAGE_KEY = 'patrimonyData';
 
+/** Generate user-specific storage key based on alias */
+export const getStorageKey = (alias) => {
+  if (!alias) return STORAGE_KEY;
+  return `${STORAGE_KEY}:${alias}`;
+};
+
 /** Default fields every custom category always includes */
 export const REQUIRED_FIELDS = ['name', 'value', 'notes'];
