@@ -18,11 +18,11 @@ const games = [
     path: '/minigames/dolphin',
   },
   {
-    id: 'coming-soon-1',
-    title: 'Coming Soon',
-    icon: '🔒',
-    description: 'A new minigame is on the way!',
-    path: null,
+    id: 'tictactoe',
+    title: 'Tic-Tac-Toe',
+    icon: '❌',
+    description: '2-player multiplayer. Create or join a room!',
+    path: '/minigames/tictactoe',
   },
   {
     id: 'coming-soon-2',

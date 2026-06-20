@@ -8,6 +8,7 @@ import OpportunityCost from './apps/opportunity/App';
 import MinigamesHub from './apps/minigames/MinigamesHub';
 import PenguinGame from './apps/minigames/penguin/PenguinGame';
 import DolphinGame from './apps/minigames/dolphin/DolphinGame';
+import TicTacToe from './apps/minigames/tictactoe/TicTacToe';
 import ExerciseApp from './apps/exercise/ExerciseApp';
 import SpinWheel from './apps/spin/App';
 import SyncPanel from './supabase/SyncPanel';
@@ -53,6 +54,8 @@ function App() {
             <Route path="/minigames" element={<MinigamesHub />} />
             <Route path="/minigames/penguin" element={<PenguinGame syncAlias={syncAlias} />} />
             <Route path="/minigames/dolphin" element={<DolphinGame syncAlias={syncAlias} />} />
+            <Route path="/minigames/tictactoe" element={<TicTacToe />} />
+            <Route path="/minigames/tictactoe/:roomId" element={<TicTacToe />} />
             <Route path="/exercise" element={<ExerciseApp syncAlias={syncAlias} />} />
             <Route path="/event/:id" element={<Event />} />
             <Route path="/spin" element={<SpinWheel />} />
