@@ -9,6 +9,7 @@ import MinigamesHub from './apps/minigames/MinigamesHub';
 import PenguinGame from './apps/minigames/penguin/PenguinGame';
 import DolphinGame from './apps/minigames/dolphin/DolphinGame';
 import TicTacToe from './apps/minigames/tictactoe/TicTacToe';
+import ColoringRoom from './apps/minigames/coloring/ColoringRoom';
 import ExerciseApp from './apps/exercise/ExerciseApp';
 import SpinWheel from './apps/spin/App';
 import SyncPanel from './supabase/SyncPanel';
@@ -56,6 +57,8 @@ function App() {
             <Route path="/minigames/dolphin" element={<DolphinGame syncAlias={syncAlias} />} />
             <Route path="/minigames/tictactoe" element={<TicTacToe />} />
             <Route path="/minigames/tictactoe/:roomId" element={<TicTacToe />} />
+            <Route path="/minigames/coloring-room" element={<ColoringRoom />} />
+            <Route path="/minigames/coloring-room/:roomId" element={<ColoringRoom />} />
             <Route path="/exercise" element={<ExerciseApp syncAlias={syncAlias} />} />
             <Route path="/event/:id" element={<Event />} />
             <Route path="/spin" element={<SpinWheel />} />

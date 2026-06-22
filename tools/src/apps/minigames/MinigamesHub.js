@@ -25,6 +25,13 @@ const games = [
     path: '/minigames/tictactoe',
   },
   {
+    id: 'coloring-room',
+    title: 'Coloring Room',
+    icon: '🎨',
+    description: 'Kids realtime coloring with image URL + shared brush over WebSockets.',
+    path: '/minigames/coloring-room',
+  },
+  {
     id: 'coming-soon-2',
     title: 'Coming Soon',
     icon: '🔒',
