@@ -22,7 +22,7 @@ const TrendChart = ({ history }) => {
 
   const points = useMemo(() => {
     if (!history || history.length === 0) return null;
-    const values = history.flatMap((h) => [h.net, h.assets, -h.liabilities]);
+    const values = history.flatMap((h) => [h.net, h.assets, h.liabilities]);
     const min = Math.min(...values, 0);
     const max = Math.max(...values, 0);
     const range = max - min || 1;
@@ -34,7 +34,7 @@ const TrendChart = ({ history }) => {
       max,
       net: history.map((h, i) => ({ x: xFor(i), y: yFor(h.net), v: h.net, date: h.date })),
       assets: history.map((h, i) => ({ x: xFor(i), y: yFor(h.assets), v: h.assets, date: h.date })),
-      liabilities: history.map((h, i) => ({ x: xFor(i), y: yFor(-h.liabilities), v: h.liabilities, date: h.date })),
+      liabilities: history.map((h, i) => ({ x: xFor(i), y: yFor(h.liabilities), v: h.liabilities, date: h.date })),
     };
   }, [history]);
 
