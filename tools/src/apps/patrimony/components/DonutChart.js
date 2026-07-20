@@ -121,7 +121,7 @@ const DonutChart = ({ data, categories, size = 200 }) => {
           <div className="legend-row" key={arc.key}>
             <span className="legend-dot" style={{ background: arc.color }} />
             <span className="legend-label">{arc.icon} {arc.label}</span>
-            <span className="legend-value">{formatMoney(arc.value)}</span>
+            <span className="legend-value" style={{ color: arc.type === 'asset' ? '#16a34a' : '#ef4444' }}>{formatMoney(arc.value)}</span>
             <span className="legend-pct">{((arc.value / grandTotal) * 100).toFixed(0)}%</span>
           </div>
         ))}
