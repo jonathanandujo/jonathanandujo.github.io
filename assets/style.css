@@ -131,6 +131,22 @@ a:hover {
     color: var(--text-color);
 }
 
+.titleContact .blogButton {
+    background: var(--secondary-color);
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.titleContact .blogButton i {
+    color: #ffffff;
+}
+
+.titleContact .blogButton:hover {
+    opacity: 0.9;
+}
+
 .titleContact i {
     color: var(--secondary-color);
     font-size: 0.9rem;
