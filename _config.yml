@@ -1,0 +1,14 @@
+title: Jonathan Andujo
+description: Personal website and blog
+
+defaults:
+  - scope:
+      path: "blog"
+      type: "pages"
+    values:
+      layout: blog
+  - scope:
+      path: "_posts"
+      type: "posts"
+    values:
+      layout: blog

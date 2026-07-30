@@ -3,6 +3,7 @@ title: "Multitasking Is Not Productivity"
 date: 2026-07-29
 categories: [blog]
 permalink: /blog/multitasking-is-not-productivity/
+layout: blog
 ---
 
 # Multitasking Is Not Productivity — It’s Engineered Mediocrity

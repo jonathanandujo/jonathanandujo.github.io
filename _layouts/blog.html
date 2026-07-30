@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+    <meta name="description" content="{{ page.excerpt | strip_html | normalize_whitespace | truncate: 160 | escape }}">
+    <link rel="stylesheet" href="{{ '/assets/blog.css' | relative_url }}">
+  </head>
+  <body>
+    <div class="blog-shell">
+      <header class="blog-header">
+        <div class="brand-row">
+          <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+          <nav class="blog-nav" aria-label="Primary">
+            <a href="{{ '/blog/' | relative_url }}">Blog</a>
+            <a href="{{ '/' | relative_url }}">Resume</a>
+          </nav>
+        </div>
+        <p class="subtitle">Thoughts on engineering, execution, and leadership.</p>
+      </header>
+
+      <main class="blog-main" aria-label="Content">
+        <article class="card">
+          {{ content }}
+        </article>
+      </main>
+
+      <footer class="blog-footer">
+        <p>Built with GitHub Pages and Jekyll.</p>
+      </footer>
+    </div>
+  </body>
+</html>
