@@ -64,6 +64,7 @@ const Sankey = ({ syncAlias }) => {
   const { push: pushSettings, pull: pullSettings, isConfigured: isSettingsConfigured } = useSupabaseSync('sankey-settings', syncAlias);
   const skipNextSettingsPushRef = useRef(true);
   const settingsPushTimerRef = useRef(null);
+  const chartPushTimersRef = useRef(new Map());
   const inputTextRef = useRef(inputText);
   const settingsRef = useRef({ width, height, fontSize, colorScheme, chartIds, selectedSankeyNumber });
 
@@ -114,7 +115,20 @@ const Sankey = ({ syncAlias }) => {
   }, [selectedSankeyNumber, syncAlias]);
 
   const handleInputChange = (e) => {
-    setInputText(e.target.value);
+    const nextText = e.target.value;
+    const chartId = selectedSankeyNumber;
+    setInputText(nextText);
+    localStorage.setItem(getScopedKey(syncAlias, `sankeyData${chartId}`), nextText);
+
+    if (isConfigured) {
+      const existingTimer = chartPushTimersRef.current.get(chartId);
+      if (existingTimer) clearTimeout(existingTimer);
+      const timer = setTimeout(() => {
+        chartPushTimersRef.current.delete(chartId);
+        push({ text: nextText });
+      }, 1000);
+      chartPushTimersRef.current.set(chartId, timer);
+    }
   };
 
   const handleGenerateChartButton = () => {
