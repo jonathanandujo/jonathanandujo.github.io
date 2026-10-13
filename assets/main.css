@@ -1,6 +1,7 @@
 :root {
     color-scheme: light;
     --primary: #14263d;
+    --secondary: #2c3e50;
     --accent: #245a82;
     --text: #202b36;
     --muted: #4b5968;
@@ -255,7 +256,7 @@ a {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: var(--secondary-color);
+    background: var(--secondary);
     color: #fff;
     display: inline-flex;
     align-items: center;
