@@ -165,6 +165,37 @@ a {
     margin: 0 0 3px;
 }
 
+.team {
+    margin-top: 9px;
+}
+
+.teamHeader {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 16px;
+}
+
+.teamTitle {
+    margin: 0;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.teamDate {
+    flex: 0 0 auto;
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.team ul {
+    margin: 3px 0 0;
+    padding-left: 19px;
+}
+
 @media (max-width: 700px) {
     .page {
         margin: 0;
@@ -243,8 +274,13 @@ a {
     }
 
     .jobDate,
-    .jobCompany {
+    .jobCompany,
+    .teamDate {
         font-size: 9pt;
+    }
+
+    .teamTitle {
+        font-size: 9.5pt;
     }
 }
 
@@ -281,7 +317,7 @@ a {
 
 
 /* ========================================
-   PRINT STYLES - Single Page PDF
+   Compact print styles
    ======================================== */
 @media print {
     /* Hide non-print elements */
@@ -352,6 +388,10 @@ a {
         padding-bottom: 2px;
     }
 
+    .section {
+        margin-bottom: 8px;
+    }
+
     .professionalSummary .sectionHeader {
         margin-top: 0;
     }
@@ -385,7 +425,18 @@ a {
     }
 
     .job {
-        margin-bottom: 7px;
+        margin-bottom: 5px;
+    }
+
+    .team {
+        margin-top: 5px;
+    }
+
+    .job li,
+    .team li {
+        font-size: 8pt;
+        line-height: 1.18;
+        margin-bottom: 1px;
     }
 
     .jobTitle {
@@ -484,12 +535,6 @@ a {
         display: none;
     }
 
-    @media print {
-    .page-break {
-        page-break-before: always;
-        break-before: page;
-    }
-}
 }
 
 /* ========================================
