@@ -10,8 +10,8 @@ C# • SQL Server • Distributed Systems • Azure AI • Azure & AWS
 
 📧 [jonathan_andujo@outlook.com](mailto:jonathan_andujo@outlook.com) •
 📞 [+52 614 217 1150](tel:+526142171150) •
-💼 [linkedin.com/in/jandujo](https://www.linkedin.com/in/jandujo) •
-💻 [github.com/jonathanandujo](https://github.com/jonathanandujo)
+💼 [linkedin.com/in/jandujo](https://www.linkedin.com/in/jandujo){target="_blank"}
+💻 [github.com/jonathanandujo](https://github.com/jonathanandujo){target="_blank"}
 
 ## Professional Summary
 
@@ -104,4 +104,4 @@ Bachelor's in IT Engineering, Universidad Tecnológica de Chihuahua
 Azure Fundamentals (AZ-900) • Azure AI Fundamentals (AI-900) • AWS Cloud Practitioner Essentials
 
 Credly:
-[credly.com/users/jonathan-andujo-flores/badges](https://www.credly.com/users/jonathan-andujo-flores/badges)
+[credly.com/users/jonathan-andujo-flores/badges](https://www.credly.com/users/jonathan-andujo-flores/badges){target="_blank"}
