@@ -244,7 +244,16 @@
         <i class="fas fa-file-pdf"></i>
 
     </a>
-
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document
+        .querySelectorAll('a[href^="http"]')
+        .forEach(link => {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+        });
+});
+</script>
 </body>
 
 </html>
