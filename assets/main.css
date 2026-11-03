@@ -1,8 +1,10 @@
 :root {
     color-scheme: light;
+
     --primary: #14263d;
     --secondary: #2c3e50;
     --accent: #245a82;
+
     --text: #202b36;
     --muted: #4b5968;
     --border: #aeb9c4;
@@ -16,335 +18,241 @@ body {
     margin: 0;
     background: #eef2f5;
     color: var(--text);
+
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 15px;
-    line-height: 1.48;
+    font-size: 14px;
+    line-height: 1.35;
 }
 
 .page {
-    max-width: 940px;
-    margin: 24px auto;
-    background: #fff;
-    box-shadow: 0 2px 16px rgba(20, 38, 61, 0.12);
+    max-width: 950px;
+    margin: 16px auto;
+    background: white;
+    box-shadow: 0 2px 10px rgba(20, 38, 61, 0.10);
 }
 
 .sheet {
-    padding: 48px 60px;
+    padding: 28px 36px;
 }
 
-.header {
-    margin-bottom: 24px;
-    padding-bottom: 18px;
-    border-bottom: 2px solid var(--primary);
+/* ========================================
+   HEADER
+   ======================================== */
+
+h1:first-of-type {
+    margin: 0;
+
     text-align: center;
-}
 
-.titleName {
-    margin: 0;
     color: var(--primary);
-    font-size: 32px;
+
+    font-size: 30px;
     font-weight: 700;
-    letter-spacing: 0.2px;
-    line-height: 1.15;
+    line-height: 1.1;
 }
 
-.titlePosition {
-    margin: 7px 0 10px;
-    color: var(--accent);
-    font-size: 16px;
-    font-weight: 700;
-}
+h1+p {
+    margin: 4px 0;
 
-.titleFocus {
-    margin: -5px 0 11px;
-    color: var(--muted);
-    font-size: 13px;
-    font-weight: 600;
-}
+    text-align: center;
 
-.titleContact {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 4px 16px;
-    color: var(--muted);
-    font-size: 13px;
-    font-style: normal;
-}
-
-.titleContact a {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.contactIcon {
-    width: 14px;
-    height: 14px;
-    flex: 0 0 14px;
-    stroke: currentColor;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.contactIconFill {
-    fill: currentColor;
-}
-
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-.section {
-    margin-bottom: 22px;
-}
-
-.sectionHeader {
-    margin: 0 0 10px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid var(--border);
     color: var(--primary);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.7px;
-    text-transform: uppercase;
-}
 
-.section p {
-    margin: 0 0 6px;
-}
-
-.summary {
-    margin: 0;
-}
-
-.job {
-    margin: 0 0 16px;
-    break-inside: avoid;
-    page-break-inside: avoid;
-}
-
-.jobHeader {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 4px 16px;
-}
-
-.jobTitle {
-    margin: 0;
-    color: var(--primary);
     font-size: 15px;
     font-weight: 700;
 }
 
-.jobDate {
-    flex: 0 0 auto;
-    margin: 0;
+h1+p+p {
+    margin: 0 0 4px;
+
+    text-align: center;
+
     color: var(--muted);
-    font-size: 13px;
-    font-weight: 600;
-}
 
-.jobCompany {
-    margin: 2px 0 5px;
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.job ul {
-    margin: 4px 0 0;
-    padding-left: 19px;
-}
-
-.job li {
-    margin: 0 0 3px;
-}
-
-.team {
-    margin-top: 9px;
-}
-
-.teamHeader {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 4px 16px;
-}
-
-.teamTitle {
-    margin: 0;
-    color: var(--primary);
-    font-size: 13px;
-    font-weight: 700;
-}
-
-.teamDate {
-    flex: 0 0 auto;
-    margin: 0;
-    color: var(--muted);
     font-size: 12px;
     font-weight: 600;
 }
 
-.team ul {
-    margin: 3px 0 0;
-    padding-left: 19px;
+h1+p+p+p {
+    margin: 0 0 16px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    padding-bottom: 12px;
+
+    border-bottom: 2px solid var(--primary);
 }
 
+/* ========================================
+   HEADINGS
+   ======================================== */
+
+h2 {
+    margin: 12px 0 6px;
+    padding-bottom: 2px;
+
+    border-bottom: 1px solid var(--border);
+
+    color: var(--primary);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    letter-spacing: .5px;
+    text-transform: uppercase;
+}
+
+h3 {
+    margin: 10px 0 2px;
+
+    color: var(--primary);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+h4 {
+    margin: 6px 0 2px;
+
+    color: var(--accent);
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* ========================================
+   TEXT
+   ======================================== */
+
+p {
+    margin: 0 0 4px;
+}
+
+strong {
+    color: var(--primary);
+}
+
+em {
+    color: var(--muted);
+}
+
+/* ========================================
+   LISTS
+   ======================================== */
+
+ul {
+    margin: 2px 0 6px;
+    padding-left: 18px;
+}
+
+li {
+    margin-bottom: 2px;
+    line-height: 1.25;
+}
+
+/* ========================================
+   LINKS
+   ======================================== */
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ========================================
+   PANDOC
+   ======================================== */
+
+hr {
+    display: none;
+}
+
+/* ========================================
+   DOWNLOAD BUTTON
+   ======================================== */
+
+.download-btn {
+    position: fixed;
+
+    right: 20px;
+    bottom: 20px;
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+
+    background: var(--secondary);
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+
+    transition: .2s;
+}
+
+.download-btn:hover {
+    color: white;
+    text-decoration: none;
+    transform: translateY(-2px);
+}
+
+.download-btn i {
+    font-size: 18px;
+}
+
+/* ========================================
+   MOBILE
+   ======================================== */
+
 @media (max-width: 700px) {
+
     .page {
         margin: 0;
     }
 
     .sheet {
-        padding: 28px 22px;
+        padding: 20px;
     }
 
-    .jobHeader {
-        display: block;
+    h1:first-of-type {
+        font-size: 26px;
     }
 }
 
+/* ========================================
+   PRINT - LEGAL
+   ======================================== */
+
 @media print {
+
     @page {
-        margin: 0.55in;
+        size: legal portrait;
+        margin: 0.25in;
     }
 
+    html,
     body {
-        background: #fff;
-        color: #000;
+        background: white !important;
+        color: black;
+
         font-size: 10pt;
-        line-height: 1.35;
-        print-color-adjust: exact;
+        line-height: 1.15;
     }
 
     .page {
         max-width: none;
-        margin: 0;
-        box-shadow: none;
-    }
-
-    .sheet {
-        padding: 0;
-    }
-
-    .header {
-        margin-bottom: 14px;
-        padding-bottom: 10px;
-    }
-
-    .titleName {
-        font-size: 23pt;
-    }
-
-    .titlePosition {
-        margin: 4px 0 7px;
-        font-size: 11pt;
-    }
-
-    .titleFocus {
-        margin: -4px 0 7px;
-        font-size: 9pt;
-    }
-
-    .titleContact {
-        font-size: 9pt;
-    }
-
-    .section {
-        margin-bottom: 14px;
-    }
-
-    .sectionHeader {
-        margin-bottom: 7px;
-        font-size: 10pt;
-    }
-
-    .job {
-        margin-bottom: 10px;
-    }
-
-    .jobTitle {
-        font-size: 10pt;
-    }
-
-    .jobDate,
-    .jobCompany,
-    .teamDate {
-        font-size: 9pt;
-    }
-
-    .teamTitle {
-        font-size: 9.5pt;
-    }
-}
-
-/* ===== DOWNLOAD BUTTON (Floating FAB) ===== */
-.download-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--secondary);
-    color: #fff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease;
-    z-index: 9999;
-}
-
-.download-btn:hover {
-    background: var(--primary-color);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-    text-decoration: none;
-    color: #fff;
-}
-
-.download-btn i {
-    font-size: 1.1rem;
-}
-
-
-/* ========================================
-   Compact print styles
-   ======================================== */
-@media print {
-    /* Hide non-print elements */
-    .no-print,
-    .no-print * {
-        display: none !important;
-    }
-
-    /* Page setup - tighter margins for single page */
-    @page {
-        size: letter;
-        margin: 0.3in 0.4in 0.3in 0.4in;
-    }
-
-    * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
-
-    html, body {
-        font-size: 9pt;
-        line-height: 1.25;
-        background: white !important;
-    }
-
-    .page {
-        max-width: 100%;
         margin: 0;
         box-shadow: none;
         border: none;
@@ -354,192 +262,65 @@ a {
         padding: 0;
     }
 
-    /* Header - compact */
-    .header {
-        padding-bottom: 8px;
-        margin-bottom: 8px;
-        border-bottom-width: 1px;
+    .download-btn,
+    .no-print {
+        display: none !important;
     }
 
-    .titleName {
-        font-size: 16pt;
-        margin-bottom: 2px;
+    h1:first-of-type {
+        font-size: 22pt;
     }
 
-    .titlePosition {
+    h2 {
+        margin: 8px 0 3px;
         font-size: 10pt;
-        margin-bottom: 6px;
     }
 
-    .titleContact {
+    h3 {
+        margin: 4px 0 1px;
+        font-size: 8.75pt;
+    }
+
+    h4 {
+        margin: 2px 0 1px;
         font-size: 8pt;
-        gap: 5px 15px;
     }
 
-    .titleContact i {
-        display: none;
-    }
-
-    /* Section headers - compact */
-    .sectionHeader {
-        font-size: 9pt;
-        margin-top: 8px;
-        margin-bottom: 5px;
-        padding-bottom: 2px;
-    }
-
-    .section {
-        margin-bottom: 8px;
-    }
-
-    .professionalSummary .sectionHeader {
-        margin-top: 0;
-    }
-
-    /* Summary - compact */
-    .professionalSummary {
-        margin-bottom: 3px;
-    }
-
-    .professionalSummaryDescription {
-        font-size: 8.5pt;
-        line-height: 1.3;
-    }
-
-    /* Layout - tighter */
-    .container {
-        gap: 15px;
-    }
-
-    .leftPanel {
-        flex: 0 0 155px;
-    }
-
-    .bodyPanel {
-        padding-right: 12px;
-    }
-
-    /* Jobs - compact */
-    .professionalDescription {
-        margin-top: 5px;
-    }
-
-    .job {
-        margin-bottom: 5px;
-    }
-
-    .team {
-        margin-top: 5px;
-    }
-
-    .job li,
-    .team li {
-        font-size: 8pt;
-        line-height: 1.18;
-        margin-bottom: 1px;
-    }
-
-    .jobTitle {
-        font-size: 8.5pt;
-        margin-bottom: 1px;
-    }
-
-    .jobDescription {
-        margin-top: 2px;
-    }
-
-    .jobDescription ul,
-    .list {
-        padding-left: 12px;
-    }
-
-    .jobDescription li,
-    .list li {
-        font-size: 8pt;
-        margin-bottom: 1px;
-        line-height: 1.25;
-    }
-
-    /* Skills - compact */
-    .areasOfExpertise {
-        margin-bottom: 6px;
-    }
-
-    .areasOfExpertise .sectionHeader {
-        margin-top: 0;
-    }
-
-    .areaDescription {
-        margin-bottom: 5px;
-    }
-
-    .areaDescription > b {
-        font-size: 7pt;
+    p {
         margin-bottom: 2px;
     }
 
-    .skill ul {
-        padding-left: 12px;
+    ul {
+        margin: 2px 0 4px;
+        padding-left: 16px;
     }
 
-    .skill li {
-        font-size: 7.5pt;
-        line-height: 1.2;
+    li {
         margin-bottom: 0;
+        line-height: 1.1;
     }
 
-    /* Certifications - compact */
-    .certifications {
-        margin-bottom: 6px;
+    h2,
+    h3,
+    h4 {
+        page-break-after: avoid;
     }
 
-    .certificationDetail {
-        font-size: 7.5pt;
-        margin-bottom: 3px;
-        line-height: 1.2;
-    }
-
-    /* Education - compact */
-    .education {
-        margin-bottom: 6px;
-    }
-
-    .educationDescription {
-        font-size: 7.5pt;
-        margin-bottom: 3px;
-        line-height: 1.2;
-    }
-
-    /* QR codes - smaller for print */
-    .qrCodes {
-        margin-top: 6px;
-        gap: 5px;
-    }
-
-    .qrCodes img {
-        width: 40px;
-        height: 40px;
-    }
-
-    /* Prevent page breaks */
-    .job,
-    .professionalSummary,
-    .areasOfExpertise,
-    .certifications,
-    .education {
+    ul,
+    li,
+    p {
         page-break-inside: avoid;
     }
 
-    /* Hide footer in print */
-    .last-update {
+    hr {
         display: none;
     }
-
 }
 
 /* ========================================
    ACCESSIBILITY
    ======================================== */
+
 @media (prefers-reduced-motion: reduce) {
     * {
         transition: none !important;
