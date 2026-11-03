@@ -277,8 +277,15 @@ hr {
     }
 
     h3 {
-        margin: 4px 0 1px;
-        font-size: 8.75pt;
+        margin: 4px 0 2px;
+        font-size: 10pt;
+        font-weight: 700;
+    }
+
+    p strong,
+    li strong {
+        font-size: 9pt;
+        font-weight: 700;
     }
 
     h4 {

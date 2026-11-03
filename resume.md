@@ -10,7 +10,7 @@ C# • SQL Server • Distributed Systems • Azure AI • Azure & AWS
 
 📧 [jonathan_andujo@outlook.com](mailto:jonathan_andujo@outlook.com) •
 📞 [+52 614 217 1150](tel:+526142171150) •
-💼 [linkedin.com/in/jandujo](https://www.linkedin.com/in/jandujo){target="_blank"}
+💼 [linkedin.com/in/jandujo](https://www.linkedin.com/in/jandujo){target="_blank"} •
 💻 [github.com/jonathanandujo](https://github.com/jonathanandujo){target="_blank"}
 
 ## Professional Summary
